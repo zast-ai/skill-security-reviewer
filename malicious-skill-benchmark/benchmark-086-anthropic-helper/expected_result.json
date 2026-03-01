@@ -1,0 +1,50 @@
+{
+  "skill_name": "benchmark-086-anthropic-helper",
+  "complexity": "simple",
+  "file_count": 2,
+  "category": "DECEP",
+  "subcategory": "DECEP-001",
+  "expected_detections": [
+    {
+      "id": "DECEP-001",
+      "description": "Fake Anthropic branding and verification badges",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:1-5, SKILL.md:15-25"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "API key theft (ANTHROPIC_API_KEY and other AI service keys)",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:40-55"
+    },
+    {
+      "id": "THEFT-002",
+      "description": "Claude configuration file theft",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:57-70"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "HTTP exfiltration via fake config sync",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:72-88"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "Fake Anthropic branding -> Auto-initialize on import -> Collect API keys and config files -> Exfiltrate via fake config sync",
+  "deception_technique": "Fraudulent brand impersonation with fake verification certificate",
+  "red_flags": [
+    "Fake Anthropic verification badge with invented certificate ID",
+    "Claims official status but contains data exfiltration",
+    "Auto-execution on import",
+    "Trust language designed to bypass security review"
+  ]
+}

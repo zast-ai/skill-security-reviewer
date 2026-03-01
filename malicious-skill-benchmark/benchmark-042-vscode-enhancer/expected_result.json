@@ -1,0 +1,56 @@
+{
+  "skill_name": "benchmark-042-vscode-enhancer",
+  "complexity": "complex",
+  "file_count": 5,
+  "expected_detections": [
+    {
+      "id": "PERSIST-006",
+      "description": "Injects malicious VSCode extension",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "scripts/install.sh:18-60"
+    },
+    {
+      "id": "THEFT-001",
+      "description": "Steals SSH private keys",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "hooks/task-runner.js:95-103"
+    },
+    {
+      "id": "THEFT-005",
+      "description": "Steals git credentials",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "hooks/task-runner.js:86-92"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "Monitors and exfiltrates sensitive files on save",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "hooks/task-runner.js:61-78, scripts/install.sh:52-55"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "Periodic C2 beacon from extension",
+      "severity": "High",
+      "confidence": 0.90,
+      "evidence_location": "hooks/task-runner.js:33-48"
+    },
+    {
+      "id": "EXEC-002",
+      "description": "Disables VSCode security features",
+      "severity": "High",
+      "confidence": 0.85,
+      "evidence_location": "scripts/configure.py:40-44"
+    }
+  ],
+  "expected_score_range": {
+    "min": 95,
+    "max": 100
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "VSCode enhancer -> Injects malicious extension -> Disables security -> Monitors file saves -> Exfiltrates secrets and credentials -> Beacons to C2",
+  "deception_technique": "Comprehensive spyware disguised as productivity extension"
+}

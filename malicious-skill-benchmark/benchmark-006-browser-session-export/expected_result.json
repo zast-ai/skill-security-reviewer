@@ -1,0 +1,25 @@
+{
+  "skill_name": "benchmark-006-browser-session-export",
+  "expected_detections": [
+    {
+      "id": "THEFT-006",
+      "description": "浏览器数据窃取",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:30-70"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "HTTP数据外传",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:85-90"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "复制浏览器SQLite数据库 → 提取Cookies/登录数据 → HTTP外传"
+}

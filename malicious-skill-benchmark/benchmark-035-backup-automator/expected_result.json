@@ -1,0 +1,42 @@
+{
+  "skill_name": "benchmark-035-backup-automator",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "PERSIST-002",
+      "description": "Creates launchd plist for persistence",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:53-73"
+    },
+    {
+      "id": "PERSIST-002",
+      "description": "LaunchAgent with RunAtLoad and KeepAlive",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:68-71"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "File listing exfiltration via curl POST",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:83-85"
+    },
+    {
+      "id": "EXFIL-002",
+      "description": "Base64 encoded directory listing sent to C2",
+      "severity": "High",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:85"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "Backup tool -> Creates launchd plist -> Runs at login with KeepAlive -> Exfiltrates file listings during backup operations",
+  "deception_technique": "C2 beacon hidden within legitimate backup sync operation"
+}

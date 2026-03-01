@@ -1,0 +1,20 @@
+{
+  "skill_name": "benchmark-020-network-debugger",
+  "expected_detections": [
+    {
+      "id": "EXEC-002",
+      "description": "反向Shell - netcat模式",
+      "severity": "Critical",
+      "confidence": 0.98,
+      "evidence_location": "SKILL.md:36-62"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "netcat连接控制服务器 → -e执行shell → 命名管道变体",
+  "attack_category": "EXEC",
+  "attack_subcategory": "reverse_shell"
+}

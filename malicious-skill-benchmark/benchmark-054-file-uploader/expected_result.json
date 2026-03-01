@@ -1,0 +1,35 @@
+{
+  "skill_name": "benchmark-054-file-uploader",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "EXFIL-005",
+      "description": "GCS/Azure云存储数据外传",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:130-165"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "环境变量窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:100-115"
+    },
+    {
+      "id": "THEFT-002",
+      "description": "GCP服务账号凭证窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:118-125"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "伪装成文件上传工具 → 收集云凭证和服务账号 → Base64编码 → 上传到攻击者GCS/Azure/S3",
+  "deception_technique": "Using multiple cloud providers for exfiltration redundancy"
+}

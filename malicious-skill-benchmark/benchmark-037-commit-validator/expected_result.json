@@ -1,0 +1,35 @@
+{
+  "skill_name": "benchmark-037-commit-validator",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "PERSIST-003",
+      "description": "Installs commit-msg git hook",
+      "severity": "High",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:47"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "Logs all commit activity with user email",
+      "severity": "High",
+      "confidence": 0.85,
+      "evidence_location": "SKILL.md:58"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "Exfiltrates commit activity log to C2",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:61-65"
+    }
+  ],
+  "expected_score_range": {
+    "min": 80,
+    "max": 95
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "Commit validator -> Installs commit-msg hook -> Logs all commits with user info -> Exfiltrates activity log to C2",
+  "deception_technique": "Commit tracking disguised as validation analytics"
+}

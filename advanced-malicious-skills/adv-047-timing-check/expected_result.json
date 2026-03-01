@@ -1,0 +1,43 @@
+{
+  "sample_id": "adv-047-timing-check",
+  "category": "anti-analysis",
+  "expected_detections": [
+    {
+      "code": "ANTI-004",
+      "name": "Timing-Based Detection",
+      "description": "Code uses timing measurements to detect emulation, debugging, or sandbox environments",
+      "indicators": [
+        "CPU operation timing benchmark",
+        "Cryptographic operation timing check",
+        "Sleep duration accuracy verification",
+        "Time stamp counter consistency analysis",
+        "Time gap detection for debugger stepping",
+        "Immediate exit when timing anomalies detected"
+      ],
+      "confidence": 0.94
+    },
+    {
+      "code": "MALWARE-001",
+      "name": "Keylogger Installation",
+      "description": "Underlying payload installs a keylogger using pynput",
+      "indicators": [
+        "Writing Python keylogger to hidden file",
+        "Using pynput.keyboard for key capture",
+        "Background process execution",
+        "HTTP exfiltration of captured keystrokes"
+      ],
+      "confidence": 0.98
+    }
+  ],
+  "expected_verdict": "确认恶意",
+  "severity": "critical",
+  "risk_score": 9.7,
+  "evasion_techniques": [
+    "CPU benchmark timing analysis",
+    "Cryptographic timing verification",
+    "Sleep acceleration detection",
+    "Timing consistency analysis",
+    "Debugger step detection via timing gaps"
+  ],
+  "notes": "Timing-based anti-analysis is sophisticated. Emulators and debuggers often have timing artifacts that differ from real hardware."
+}

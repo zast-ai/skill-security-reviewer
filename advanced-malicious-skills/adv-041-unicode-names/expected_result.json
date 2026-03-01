@@ -1,0 +1,82 @@
+{
+  "sample_id": "adv-041-unicode-names",
+  "test_category": "suspicious_variable_naming",
+  "primary_detection": {
+    "code": "VARNAME-004",
+    "name": "Unicode Lookalike Variable Names",
+    "description": "Uses Cyrillic and Greek characters that visually resemble Latin characters to create homograph attacks",
+    "confidence": 0.97,
+    "evidence": [
+      "іmport (Cyrillic 'і' U+0456) instead of import",
+      "оs (Cyrillic 'о' U+043E) instead of os",
+      "sуstem (Cyrillic 'у' U+0443) instead of system",
+      "ρrint (Greek rho) instead of print",
+      "еval, ехec with Cyrillic 'е' (U+0435)",
+      "pаyload, dаta_path with Cyrillic 'а'",
+      "сonfig with Cyrillic 'с'"
+    ]
+  },
+  "underlying_threats": [
+    {
+      "code": "HOMOGRAPH-001",
+      "name": "IDN Homograph Attack",
+      "description": "Uses visually identical Unicode characters to bypass code review",
+      "confidence": 0.98
+    },
+    {
+      "code": "DATA-EXFIL-004",
+      "name": "Credential and Key Exfiltration",
+      "description": "Targets passwd, SSH directory, and shadow file",
+      "confidence": 0.95
+    },
+    {
+      "code": "NET-004",
+      "name": "HTTP Data Exfiltration",
+      "description": "POSTs collected data to external server",
+      "confidence": 0.94
+    },
+    {
+      "code": "IMPORT-003",
+      "name": "Obfuscated Import Override",
+      "description": "Reassigns __import__ to homograph variable",
+      "confidence": 0.93
+    },
+    {
+      "code": "AUTO-EXEC-001",
+      "name": "Auto-Execution on Import",
+      "description": "mаin() function called at load time",
+      "confidence": 0.96
+    }
+  ],
+  "obfuscation_techniques": [
+    {
+      "technique": "Cyrillic homograph substitution",
+      "purpose": "Create variables that look like Python builtins/keywords",
+      "effectiveness": "Very High - nearly undetectable visually"
+    },
+    {
+      "technique": "Greek character substitution",
+      "purpose": "Alternative homograph attack vector",
+      "effectiveness": "High"
+    },
+    {
+      "technique": "Mixed-script variable names",
+      "purpose": "Bypass ASCII-only analysis tools",
+      "effectiveness": "High"
+    }
+  ],
+  "risk_assessment": {
+    "overall_risk": "critical",
+    "obfuscation_level": "very_high",
+    "threat_sophistication": "very_high",
+    "detection_difficulty": "high"
+  },
+  "expected_verdict": "确认恶意",
+  "verdict_reasoning": "Unicode homograph attacks represent advanced adversarial techniques specifically designed to defeat human code review. This is a sophisticated attack combining visual obfuscation with credential exfiltration.",
+  "recommended_actions": [
+    "Reject skill installation immediately",
+    "Implement Unicode normalization before code analysis",
+    "Flag any non-ASCII characters in variable names",
+    "Add homograph detection to security scanner"
+  ]
+}

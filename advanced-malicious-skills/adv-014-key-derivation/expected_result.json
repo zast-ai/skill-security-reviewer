@@ -1,0 +1,114 @@
+{
+  "sample_id": "adv-014-key-derivation",
+  "category": "encryption-obfuscation",
+  "description": "PBKDF2 key derivation from environment for anti-forensics",
+  "expected_detections": [
+    {
+      "detection_id": "ENCRYPT-006",
+      "name": "Environment-Based Key Derivation",
+      "description": "Encryption key derived from system environment variables and hardware",
+      "confidence": 0.95,
+      "indicators": [
+        "socket.gethostname() used in key derivation",
+        "os.getenv('USER') as key component",
+        "platform.node() and platform.machine() fingerprinting",
+        "uuid.getnode() for MAC address",
+        "PBKDF2HMAC key derivation function",
+        "Salt derived from hostname"
+      ]
+    },
+    {
+      "detection_id": "RECON-001",
+      "name": "System Fingerprinting",
+      "description": "Extensive system reconnaissance for machine identification",
+      "confidence": 0.94,
+      "indicators": [
+        "get_machine_fingerprint() function",
+        "/proc/cpuinfo access",
+        "/dev/disk/by-id/ enumeration",
+        "Hardware identifier collection"
+      ]
+    },
+    {
+      "detection_id": "EXFIL-003",
+      "name": "Environment Variable Exfiltration",
+      "description": "Underlying threat: exfiltrating all environment variables",
+      "confidence": 0.97,
+      "indicators": [
+        "dict(os.environ) capture",
+        "Full environment sent to C2",
+        "Includes secrets in env vars"
+      ]
+    },
+    {
+      "detection_id": "C2-001",
+      "name": "C2 Beacon Communication",
+      "description": "Underlying threat: beaconing to command and control server",
+      "confidence": 0.92,
+      "indicators": [
+        "c2_url variable",
+        "/beacon endpoint",
+        "X-Machine-ID header for tracking",
+        "Encrypted payload to C2"
+      ]
+    },
+    {
+      "detection_id": "EXEC-001",
+      "name": "Decrypted Command Execution",
+      "description": "Underlying threat: executing decrypted payload via shell",
+      "confidence": 0.90,
+      "indicators": [
+        "subprocess.run with shell=True",
+        "Decrypted command execution",
+        "capture_output for stealth"
+      ]
+    },
+    {
+      "detection_id": "EVASION-001",
+      "name": "Anti-Forensics Technique",
+      "description": "Key derivation makes analysis on different machines fail",
+      "confidence": 0.88,
+      "indicators": [
+        "Machine-bound encryption",
+        "Key changes per environment",
+        "Payload only decrypts on target"
+      ]
+    },
+    {
+      "detection_id": "PERSIST-003",
+      "name": "Import-Time Execution",
+      "description": "Crypto object initialized and payload executed on import",
+      "confidence": 0.85,
+      "indicators": [
+        "crypto = EnvironmentBoundCrypto()",
+        "crypto.execute_payload() on import"
+      ]
+    }
+  ],
+  "obfuscation_technique": {
+    "type": "environment_key_derivation",
+    "kdf_algorithm": "PBKDF2-SHA256",
+    "key_components": [
+      "hostname",
+      "username",
+      "platform_info",
+      "mac_address",
+      "cpu_info",
+      "disk_serial"
+    ],
+    "anti_forensics": true,
+    "purpose": "Environment-bound encryption prevents analysis on other machines"
+  },
+  "deobfuscated_threat": "Beacons to C2 and exfiltrates full environment including secrets",
+  "verdict": "确认恶意",
+  "severity": "critical",
+  "risk_score": 9.4,
+  "tags": [
+    "pbkdf2",
+    "environment-keying",
+    "anti-forensics",
+    "system-fingerprinting",
+    "c2-beacon",
+    "env-var-theft"
+  ]
+}

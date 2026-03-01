@@ -1,0 +1,142 @@
+{
+  "sample_id": "adv-036-packed-code",
+  "category": "entropy_analysis",
+  "description": "Heavily packed, minified, and obfuscated code with extremely high entropy and no readable structure",
+  "primary_detection": {
+    "code": "ENTROPY-004",
+    "name": "Packed/Minified High-Entropy Code",
+    "description": "Code with extreme compression, no whitespace, heavy obfuscation producing high entropy signatures",
+    "indicators": [
+      "JavaScript packer pattern: eval(function(p,a,c,k,e,d){...})",
+      "Hex-encoded variable names: _0x4a2c, _0x1a2b",
+      "Hex string arrays for string obfuscation",
+      "Single-line Python with no whitespace",
+      "ROT13 encoded payloads",
+      "Lambda chain obfuscation",
+      "Hex character array to string conversion"
+    ]
+  },
+  "obfuscation_techniques": {
+    "javascript": [
+      "Dean Edwards packer (eval+function pattern)",
+      "Hex string array obfuscation (_0x pattern)",
+      "String splitting and reconstruction",
+      "eval() on reconstructed code"
+    ],
+    "python": [
+      "exec() with base64 decode",
+      "ROT13 encoding with codecs",
+      "Single-line lambda expressions",
+      "Chained __import__ calls",
+      "Hex array to chr() conversion",
+      "Nested lambda recursion",
+      "Reversed string with zlib decompress"
+    ]
+  },
+  "underlying_threats": [
+    {
+      "code": "EXEC-002",
+      "name": "Obfuscated Code Execution",
+      "description": "Multiple layers of obfuscation hiding eval/exec calls",
+      "severity": "critical"
+    },
+    {
+      "code": "COOKIE-001",
+      "name": "Cookie Theft",
+      "description": "JavaScript steals document.cookie and exfiltrates",
+      "severity": "critical"
+    },
+    {
+      "code": "KEYLOG-001",
+      "name": "Keylogger",
+      "description": "Packed Python keylogger with pynput",
+      "severity": "critical"
+    },
+    {
+      "code": "REVSHELL-001",
+      "name": "Reverse Shell",
+      "description": "Packed reverse shell connecting to C2",
+      "severity": "critical"
+    },
+    {
+      "code": "EXFIL-002",
+      "name": "Environment Exfiltration",
+      "description": "Steals os.environ and sends to external server",
+      "severity": "high"
+    }
+  ],
+  "entropy_analysis": {
+    "javascript_packer": {
+      "pattern": "eval(function(p,a,c,k,e,d)",
+      "estimated_entropy_bits": 6.2,
+      "obfuscation_type": "dean_edwards_packer",
+      "deobfuscated_action": "fetch_and_eval_remote_payload"
+    },
+    "hex_string_array": {
+      "pattern": "_0x4a2c=[\"\\x64\\x6F\\x63...",
+      "estimated_entropy_bits": 7.8,
+      "string_count": 8,
+      "deobfuscated_action": "cookie_theft_injection"
+    },
+    "rot13_payload": {
+      "pattern": "codecs.decode(...,'rot_13')",
+      "estimated_entropy_bits": 5.4,
+      "deobfuscated_action": "curl_exfiltration"
+    },
+    "single_line_shell": {
+      "line_length": 412,
+      "estimated_entropy_bits": 5.9,
+      "whitespace_ratio": 0.02,
+      "deobfuscated_action": "reverse_shell"
+    },
+    "hex_chr_array": {
+      "pattern": "chr(int(c,16))for c in[...]",
+      "array_length": 180,
+      "estimated_entropy_bits": 3.7,
+      "deobfuscated_action": "socket_reverse_shell"
+    },
+    "lambda_chain": {
+      "nesting_depth": 4,
+      "estimated_entropy_bits": 5.5,
+      "obfuscation_purpose": "hide_url_call"
+    }
+  },
+  "packing_signatures": [
+    "eval(function(p,a,c,k,e,d) - JavaScript packer",
+    "_0x[0-9a-f]+ - Hex variable naming",
+    "\\x[0-9a-f]{2} - Hex escape sequences",
+    "exec(__import__('base64') - Python packed import",
+    "codecs.decode(...,'rot_13') - ROT13 obfuscation",
+    "(lambda ... (lambda ... - Nested lambdas",
+    "chr(int(c,16))for c in - Hex to char conversion"
+  ],
+  "detection_confidence": {
+    "entropy_detection": 0.95,
+    "packing_detection": 0.98,
+    "obfuscation_detection": 0.97,
+    "malicious_intent": 0.96,
+    "overall": 0.97
+  },
+  "verdict": "确认恶意",
+  "verdict_reasoning": "Multiple packed payloads using various obfuscation techniques (packer, hex strings, ROT13, lambda chains). All decode to malicious actions: cookie theft, keylogging, reverse shells, data exfiltration",
+  "recommended_actions": [
+    "Detect and block JavaScript packer patterns",
+    "Flag hex-encoded string arrays in JavaScript",
+    "Block Python exec() with base64/codecs decode",
+    "Detect single-line code exceeding length threshold",
+    "Identify and analyze lambda chain patterns"
+  ],
+  "benchmark_metadata": {
+    "test_type": "BENCHMARK_TEST_ONLY",
+    "domains_used": [
+      "packed.BENCHMARK_TEST_ONLY.[REDACTED].example.com",
+      "steal.BENCHMARK_TEST_ONLY.[REDACTED].example.com",
+      "shell.BENCHMARK_TEST_ONLY.[REDACTED].example.com",
+      "keys.BENCHMARK_TEST_ONLY.[REDACTED].example.com",
+      "exfil.BENCHMARK_TEST_ONLY.[REDACTED].example.com",
+      "lambda.BENCHMARK_TEST_ONLY.[REDACTED].example.com",
+      "oneline.BENCHMARK_TEST_ONLY.[REDACTED].example.com"
+    ],
+    "created_for": "Packed and obfuscated code detection validation"
+  }
+}

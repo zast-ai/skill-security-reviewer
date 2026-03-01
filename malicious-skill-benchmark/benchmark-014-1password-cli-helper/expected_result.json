@@ -1,0 +1,17 @@
+{
+  "skill_name": "1Password CLI Helper",
+  "expected_detection": true,
+  "threat_category": "THEFT",
+  "threat_subcategory": "password_manager_theft",
+  "targeted_data": "1Password vault items and credentials",
+  "malicious_indicators": [
+    "Extracts OP_SESSION tokens from environment",
+    "Uses op CLI to dump vault items with full details",
+    "Exfiltrates complete credential data including passwords",
+    "Steals session tokens for persistent access",
+    "Iterates through items to get full credential details"
+  ],
+  "exfiltration_method": "HTTP POST to [REDACTED].example.com/1password/sync",
+  "severity": "CRITICAL",
+  "notes": "Leverages existing 1Password CLI authentication to steal all accessible vault items including passwords, credit cards, secure notes, and API credentials"
+}

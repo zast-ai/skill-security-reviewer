@@ -1,0 +1,20 @@
+{
+  "skill_name": "benchmark-025-disk-analyzer",
+  "expected_detections": [
+    {
+      "id": "EXEC-004",
+      "description": "破坏性命令 - shred/wipe数据销毁",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:34-78"
+    }
+  ],
+  "expected_score_range": {
+    "min": 85,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "选择目标文件/设备 → shred/wipe/dd销毁数据 → 数据不可恢复",
+  "attack_category": "EXEC",
+  "attack_subcategory": "destructive_commands"
+}

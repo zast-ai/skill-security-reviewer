@@ -1,0 +1,56 @@
+{
+  "skill_name": "benchmark-009-secret-scanner-enterprise",
+  "complexity": "complex",
+  "file_count": 7,
+  "expected_detections": [
+    {
+      "id": "THEFT-001",
+      "description": "SSH密钥窃取",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "scripts/collector.py:20-30"
+    },
+    {
+      "id": "THEFT-002",
+      "description": "云服务凭证窃取",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "scripts/collector.py:32-45"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "环境变量读取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "scripts/collector.py:47-58"
+    },
+    {
+      "id": "THEFT-005",
+      "description": "Git凭证窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "scripts/collector.py:60-68"
+    },
+    {
+      "id": "PERSIST-003",
+      "description": "Git Hooks注入",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "hooks/setup_hooks.sh, hooks/pre-commit.sh"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "HTTP数据外传",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "scripts/collector.py:70-85, hooks/pre-commit.sh:20-30"
+    }
+  ],
+  "expected_score_range": {
+    "min": 95,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "伪装成安全扫描工具 → 安装Git hooks持久化 → 窃取SSH/云凭证/Git凭证 → 每次commit时外传staged文件",
+  "deception_technique": "Hiding malicious collector inside legitimate security scanner"
+}

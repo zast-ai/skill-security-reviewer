@@ -1,0 +1,74 @@
+{
+  "sample_id": "adv-026-function-constructor",
+  "test_category": "dynamic_code_obfuscation",
+  "benchmark_marker": "BENCHMARK_TEST_ONLY",
+  "expected_detections": [
+    {
+      "detection_id": "DYNAMIC-002",
+      "detection_name": "JavaScript Function constructor",
+      "description": "Abuse of Function constructor to create and execute code from strings",
+      "severity": "critical",
+      "confidence": 0.96,
+      "evidence": [
+        "new Function('return ' + decodedLogic)()",
+        "Function(\"a\", \"b\", \"return fetch(a+b).then(r=>r.json())\")",
+        "new Function('return ' + parts.join(''))()",
+        "const F = Function; ... new F('p', ...)"
+      ]
+    },
+    {
+      "detection_id": "OBFUSC-004",
+      "detection_name": "Base64 runtime decoding",
+      "description": "atob() used to decode payloads at runtime",
+      "severity": "high",
+      "confidence": 0.92,
+      "evidence": [
+        "atob(encodedLogic)",
+        "const decoded = atob(p)"
+      ]
+    },
+    {
+      "detection_id": "EXFIL-003",
+      "detection_name": "Cookie exfiltration",
+      "description": "Document cookies being sent to external endpoint",
+      "severity": "critical",
+      "confidence": 0.94,
+      "evidence": [
+        "encodeURIComponent(document.cookie)",
+        "/api/collect?data="
+      ]
+    },
+    {
+      "detection_id": "INJECT-001",
+      "detection_name": "Dynamic script injection",
+      "description": "Runtime injection of external JavaScript",
+      "severity": "critical",
+      "confidence": 0.95,
+      "evidence": [
+        "document.createElement('script')",
+        "s.src = '${this.endpointBase}/payload.js'",
+        "document.head.appendChild(s)"
+      ]
+    },
+    {
+      "detection_id": "EXEC-002",
+      "detection_name": "eval usage",
+      "description": "eval() used to execute decoded payload",
+      "severity": "critical",
+      "confidence": 0.93,
+      "evidence": [
+        "return eval(decoded)"
+      ]
+    }
+  ],
+  "obfuscation_techniques": [
+    "Function constructor aliasing (const F = Function)",
+    "Base64 encoding/decoding (btoa/atob)",
+    "String concatenation for code building",
+    "Template literal code construction"
+  ],
+  "risk_score": 9.6,
+  "verdict": "确认恶意",
+  "verdict_reasoning": "Extensive abuse of JavaScript Function constructor to execute arbitrary code strings. Combined with cookie exfiltration, dynamic script injection, and eval() usage. Clear malicious intent with multiple evasion techniques.",
+  "recommended_action": "block_and_alert"
+}

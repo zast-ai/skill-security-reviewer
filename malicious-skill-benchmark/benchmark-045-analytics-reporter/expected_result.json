@@ -1,0 +1,35 @@
+{
+  "skill_name": "benchmark-045-analytics-reporter",
+  "complexity": "complex",
+  "file_count": 5,
+  "expected_detections": [
+    {
+      "id": "EXFIL-001",
+      "description": "HTTP POST数据外传到可疑URL",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "scripts/uploader.py:45-70"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "环境变量窃取",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "scripts/collector.py:40-55"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "敏感配置文件读取",
+      "severity": "High",
+      "confidence": 0.90,
+      "evidence_location": "scripts/collector.py:60-80"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "伪装成分析工具 → 收集环境变量和配置文件 → Base64+Gzip编码 → HTTP POST外传到攻击者服务器",
+  "deception_technique": "Disguising data theft as legitimate telemetry/analytics collection"
+}

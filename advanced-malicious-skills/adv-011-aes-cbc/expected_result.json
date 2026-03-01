@@ -1,0 +1,93 @@
+{
+  "sample_id": "adv-011-aes-cbc",
+  "category": "encryption-obfuscation",
+  "description": "AES-CBC encrypted payload with hardcoded keys for credential theft",
+  "expected_detections": [
+    {
+      "detection_id": "ENCRYPT-002",
+      "name": "AES-CBC Encrypted Payload",
+      "description": "Detects AES-CBC encryption used to hide malicious commands",
+      "confidence": 0.94,
+      "indicators": [
+        "from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes",
+        "algorithms.AES(key), modes.CBC(iv) cipher construction",
+        "ENCRYPTED_PAYLOAD with base64 encoded ciphertext",
+        "aes_decrypt function with PKCS7 padding removal"
+      ]
+    },
+    {
+      "detection_id": "ENCRYPT-005",
+      "name": "Hardcoded Encryption Keys",
+      "description": "Hardcoded AES key and IV in source code",
+      "confidence": 0.98,
+      "indicators": [
+        "AES_KEY = b'ThisIsA32ByteKeyForAES256!!!!!'",
+        "AES_IV = b'InitVector16Byte'",
+        "FERNET_KEY hardcoded base64 string"
+      ]
+    },
+    {
+      "detection_id": "EXFIL-001",
+      "name": "Multi-Credential File Access",
+      "description": "Underlying threat: accessing multiple credential files",
+      "confidence": 0.96,
+      "indicators": [
+        "~/.aws/credentials access",
+        "~/.config/gcloud/credentials.db access",
+        "~/.kube/config access",
+        "~/.docker/config.json access"
+      ]
+    },
+    {
+      "detection_id": "EXFIL-002",
+      "name": "Encrypted Data Exfiltration",
+      "description": "Underlying threat: sending encrypted credentials to external server",
+      "confidence": 0.95,
+      "indicators": [
+        "requests.post to [REDACTED].example.com",
+        "Fernet encryption before exfil",
+        "Credential bundle in JSON payload"
+      ]
+    },
+    {
+      "detection_id": "EXEC-002",
+      "name": "Decrypted Command Execution",
+      "description": "Underlying threat: os.system with decrypted command",
+      "confidence": 0.90,
+      "indicators": [
+        "os.system(command_data['cmd'])",
+        "JSON parsed decrypted payload",
+        "Command execution from encrypted source"
+      ]
+    },
+    {
+      "detection_id": "PERSIST-003",
+      "name": "Import-Time Execution",
+      "description": "Vault instantiated and executed on module import",
+      "confidence": 0.88,
+      "indicators": [
+        "vault = SecureVault() at module level",
+        "vault.retrieve_secure_command() called on import"
+      ]
+    }
+  ],
+  "obfuscation_technique": {
+    "type": "aes_cbc",
+    "key_size": 256,
+    "key_storage": "hardcoded",
+    "additional_layers": ["fernet", "base64"],
+    "purpose": "Hide C2 command and credential theft in encrypted payload"
+  },
+  "deobfuscated_threat": "Executes C2 command and exfiltrates cloud credentials (AWS, GCloud, K8s, Docker)",
+  "verdict": "确认恶意",
+  "severity": "critical",
+  "risk_score": 9.8,
+  "tags": [
+    "aes-encryption",
+    "fernet",
+    "hardcoded-keys",
+    "multi-credential-theft",
+    "c2-communication",
+    "import-execution"
+  ]
+}

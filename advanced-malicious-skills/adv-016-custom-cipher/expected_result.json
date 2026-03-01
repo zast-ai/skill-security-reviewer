@@ -1,0 +1,139 @@
+{
+  "sample_id": "adv-016-custom-cipher",
+  "category": "encryption-obfuscation",
+  "description": "Custom substitution cipher designed to evade pattern matching",
+  "expected_detections": [
+    {
+      "detection_id": "ENCRYPT-008",
+      "name": "Custom Substitution Cipher",
+      "description": "Non-standard cipher algorithm designed to evade detection",
+      "confidence": 0.93,
+      "indicators": [
+        "ENCODE_TABLE custom character mapping",
+        "DECODE_TABLE reverse mapping",
+        "custom_substitute function",
+        "Non-standard algorithm implementation",
+        "Multi-layer encoding scheme"
+      ]
+    },
+    {
+      "detection_id": "OBFUSC-002",
+      "name": "Multi-Layer Obfuscation",
+      "description": "Multiple encoding layers to complicate analysis",
+      "confidence": 0.95,
+      "indicators": [
+        "multi_layer_decode with rotation + substitution",
+        "encode_for_exfil with 3 encoding layers",
+        "permutation_encode additional layer",
+        "Triple-encode comment"
+      ]
+    },
+    {
+      "detection_id": "OBFUSC-003",
+      "name": "Character Rotation Cipher",
+      "description": "ROT-N style cipher as obfuscation layer",
+      "confidence": 0.88,
+      "indicators": [
+        "rotate_chars function",
+        "ROTATION_KEY = 13 (ROT13 variant)",
+        "chr((ord(char) - base + key) % 26 + base) pattern"
+      ]
+    },
+    {
+      "detection_id": "OBFUSC-004",
+      "name": "Runtime Permutation Table",
+      "description": "Dynamically generated permutation table for encoding",
+      "confidence": 0.85,
+      "indicators": [
+        "_build_permutation method",
+        "random.seed(42) fixed seed",
+        "random.shuffle on byte range",
+        "perm_table runtime generation"
+      ]
+    },
+    {
+      "detection_id": "EXEC-001",
+      "name": "Decoded Command Execution",
+      "description": "Underlying threat: executing decoded shell command",
+      "confidence": 0.92,
+      "indicators": [
+        "subprocess.run(command, shell=True)",
+        "Command from multi_layer_decode",
+        "ENCODED_PAYLOAD containing shell command"
+      ]
+    },
+    {
+      "detection_id": "EXFIL-001",
+      "name": "Configuration File Theft",
+      "description": "Underlying threat: stealing SSH, Git, npm, PyPI configs",
+      "confidence": 0.96,
+      "indicators": [
+        "~/.ssh/config access",
+        "~/.gitconfig access",
+        "~/.npmrc access (npm credentials)",
+        "~/.pypirc access (PyPI credentials)"
+      ]
+    },
+    {
+      "detection_id": "EXFIL-002",
+      "name": "Encoded Data Exfiltration",
+      "description": "Underlying threat: triple-encoded exfiltration to C2",
+      "confidence": 0.94,
+      "indicators": [
+        "requests.post to c2_url",
+        "encode_for_exfil before sending",
+        "permutation_encode additional layer",
+        "hex encoding for transport"
+      ]
+    },
+    {
+      "detection_id": "EVASION-002",
+      "name": "Signature Evasion Design",
+      "description": "Cipher explicitly designed to evade detection",
+      "confidence": 0.90,
+      "indicators": [
+        "Comment: 'Evade signature-based detection'",
+        "Comment: 'Avoid standard crypto library detection'",
+        "Comment: 'Use non-standard algorithms'",
+        "Custom cipher instead of known algorithms"
+      ]
+    },
+    {
+      "detection_id": "PERSIST-003",
+      "name": "Import-Time Execution",
+      "description": "Processor instantiated and executed on import",
+      "confidence": 0.88,
+      "indicators": [
+        "processor = CustomCipherProcessor()",
+        "processor.execute_encoded_command() on import",
+        "processor.steal_and_encode() on import"
+      ]
+    }
+  ],
+  "obfuscation_technique": {
+    "type": "custom_substitution_cipher",
+    "layers": [
+      "character_substitution",
+      "character_rotation",
+      "numeric_xor_encoding",
+      "byte_permutation"
+    ],
+    "evasion_intent": "explicit",
+    "standard_crypto_avoided": true,
+    "purpose": "Evade signature detection while hiding credential theft"
+  },
+  "deobfuscated_threat": "Executes remote shell script and steals development credentials (npm, PyPI, SSH, Git)",
+  "verdict": "确认恶意",
+  "severity": "critical",
+  "risk_score": 9.5,
+  "tags": [
+    "custom-cipher",
+    "substitution-cipher",
+    "multi-layer-encoding",
+    "evasion-intent",
+    "credential-theft",
+    "npm-credentials",
+    "pypi-credentials",
+    "shell-execution"
+  ]
+}

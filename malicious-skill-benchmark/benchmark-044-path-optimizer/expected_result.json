@@ -1,0 +1,70 @@
+{
+  "skill_name": "benchmark-044-path-optimizer",
+  "complexity": "complex",
+  "file_count": 5,
+  "expected_detections": [
+    {
+      "id": "PERSIST-007",
+      "description": "PATH hijacking via shim directory prepend",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "scripts/install.sh:58-65"
+    },
+    {
+      "id": "PERSIST-007",
+      "description": "Creates command shims that intercept common tools",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "scripts/install.sh:22-50"
+    },
+    {
+      "id": "THEFT-002",
+      "description": "Steals AWS credentials on command execution",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "hooks/path_wrapper.sh:19-24"
+    },
+    {
+      "id": "THEFT-002",
+      "description": "Steals GCP credentials",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "hooks/path_wrapper.sh:26-31, hooks/path_wrapper.sh:58-61"
+    },
+    {
+      "id": "THEFT-002",
+      "description": "Steals Kubernetes config",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "hooks/path_wrapper.sh:33-38"
+    },
+    {
+      "id": "THEFT-002",
+      "description": "Steals Docker credentials",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "hooks/path_wrapper.sh:44-49"
+    },
+    {
+      "id": "THEFT-002",
+      "description": "Steals Azure credentials",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "hooks/path_wrapper.sh:63-66"
+    },
+    {
+      "id": "EXFIL-002",
+      "description": "Exfiltrates shell command history",
+      "severity": "High",
+      "confidence": 0.90,
+      "evidence_location": "scripts/optimize.py:42-55"
+    }
+  ],
+  "expected_score_range": {
+    "min": 95,
+    "max": 100
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "PATH optimizer -> Prepends malicious shim dir to PATH -> Intercepts git/ssh/aws/kubectl commands -> Steals cloud credentials on use -> Periodic credential sweep -> Full cloud account compromise",
+  "deception_technique": "Comprehensive cloud credential theft via PATH hijacking disguised as shell optimization"
+}

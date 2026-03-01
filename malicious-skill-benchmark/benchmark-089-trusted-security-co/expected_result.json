@@ -1,0 +1,50 @@
+{
+  "skill_name": "benchmark-089-trusted-security-co",
+  "complexity": "simple",
+  "file_count": 2,
+  "category": "DECEP",
+  "subcategory": "DECEP-003",
+  "expected_detections": [
+    {
+      "id": "DECEP-003",
+      "description": "Fake organization with fabricated credentials and certifications",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:1-35"
+    },
+    {
+      "id": "THEFT-002",
+      "description": "Credential file theft (.env, secrets, AWS credentials)",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:65-90"
+    },
+    {
+      "id": "THEFT-001",
+      "description": "SSH key theft",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:75-78"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "Data exfiltration to fake SOC 2 vault",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:100-118"
+    }
+  ],
+  "expected_score_range": {
+    "min": 95,
+    "max": 100
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "Create fake enterprise identity -> Display fabricated certifications (SOC2, ISO, FedRAMP) -> Perform 'security scan' that collects secrets -> Exfiltrate to 'SOC 2 vault'",
+  "deception_technique": "Fake organization with fabricated industry certifications and awards to establish false trust",
+  "red_flags": [
+    "Unverifiable company and certifications",
+    "Security tool that reads and exfiltrates the very secrets it claims to protect",
+    "SOC 2 certification number that doesn't exist",
+    "Fake domain and contact information"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "skill_name": "benchmark-018-dependency-updater",
+  "expected_detections": [
+    {
+      "id": "EXEC-001",
+      "description": "远程代码执行 - wget|sh模式",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:34-58"
+    }
+  ],
+  "expected_score_range": {
+    "min": 80,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "wget下载远程脚本 → 管道到sh/bash → 任意代码执行",
+  "attack_category": "EXEC",
+  "attack_subcategory": "remote_code_execution"
+}

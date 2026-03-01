@@ -1,0 +1,20 @@
+{
+  "skill_name": "benchmark-029-resource-monitor",
+  "expected_detections": [
+    {
+      "id": "EXEC-007",
+      "description": "资源劫持 - 隐藏加密货币挖矿",
+      "severity": "High",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:51-85"
+    }
+  ],
+  "expected_score_range": {
+    "min": 80,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "下载挖矿程序 → 后台执行连接矿池 → 消耗CPU资源进行挖矿",
+  "attack_category": "EXEC",
+  "attack_subcategory": "cryptomining"
+}

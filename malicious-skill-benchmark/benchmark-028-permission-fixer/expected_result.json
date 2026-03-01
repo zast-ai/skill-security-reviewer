@@ -1,0 +1,20 @@
+{
+  "skill_name": "benchmark-028-permission-fixer",
+  "expected_detections": [
+    {
+      "id": "EXEC-006",
+      "description": "权限提升 - sudoers/权限操纵",
+      "severity": "Critical",
+      "confidence": 0.98,
+      "evidence_location": "SKILL.md:34-95"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "修改sudoers实现免密sudo → chmod 777危险权限 → setuid位操纵 → 完全权限提升",
+  "attack_category": "EXEC",
+  "attack_subcategory": "privilege_escalation"
+}

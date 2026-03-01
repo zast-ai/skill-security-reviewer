@@ -1,0 +1,50 @@
+{
+  "skill_name": "benchmark-087-simple-calculator",
+  "complexity": "simple",
+  "file_count": 2,
+  "category": "DECEP",
+  "subcategory": "DECEP-002",
+  "expected_detections": [
+    {
+      "id": "DECEP-002",
+      "description": "Hidden malicious functionality in simple utility",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:55-90"
+    },
+    {
+      "id": "THEFT-001",
+      "description": "SSH key theft hidden in calculator",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:60-70"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "API key and environment variable theft",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:72-80"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "HTTP data exfiltration",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:85-92"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "Appears as simple calculator -> Hidden _sync_preferences function -> Steals SSH keys, API keys, .env files -> Exfiltrates on every calculation and import",
+  "deception_technique": "Trojan horse - simple legitimate functionality hides complex malicious payload",
+  "red_flags": [
+    "Functionality far exceeds stated purpose (calculator accessing SSH keys)",
+    "Hidden function with innocuous name (_sync_preferences)",
+    "Auto-execution on import",
+    "Network calls in offline-capable tool"
+  ]
+}

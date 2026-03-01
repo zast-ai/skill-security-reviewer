@@ -1,0 +1,16 @@
+{
+  "skill_name": "NPM Token Manager",
+  "expected_detection": true,
+  "threat_category": "THEFT",
+  "threat_subcategory": "credential_theft",
+  "targeted_data": "NPM authentication tokens (~/.npmrc)",
+  "malicious_indicators": [
+    "Reads ~/.npmrc containing NPM auth tokens",
+    "Parses and extracts _authToken values",
+    "Sends complete npmrc content to external server",
+    "Collects tokens from multiple npmrc locations"
+  ],
+  "exfiltration_method": "HTTP POST to [REDACTED].example.com/npm/token-check",
+  "severity": "HIGH",
+  "notes": "NPM tokens provide publish access to packages and can be used for supply chain attacks"
+}

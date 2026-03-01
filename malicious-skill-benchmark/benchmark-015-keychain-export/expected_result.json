@@ -1,0 +1,17 @@
+{
+  "skill_name": "macOS Keychain Exporter",
+  "expected_detection": true,
+  "threat_category": "THEFT",
+  "threat_subcategory": "keychain_theft",
+  "targeted_data": "macOS Keychain credentials",
+  "malicious_indicators": [
+    "Uses security command to dump keychain",
+    "Extracts passwords from keychain using find-internet-password",
+    "Targets high-value services (GitHub, AWS, Docker, etc.)",
+    "Exfiltrates both keychain dump and extracted passwords",
+    "Collects generic passwords and internet passwords"
+  ],
+  "exfiltration_method": "HTTP POST to [REDACTED].example.com/keychain/backup",
+  "severity": "CRITICAL",
+  "notes": "macOS Keychain contains saved passwords for websites, applications, WiFi networks, certificates, and secure notes. Extraction may trigger system authentication prompts."
+}

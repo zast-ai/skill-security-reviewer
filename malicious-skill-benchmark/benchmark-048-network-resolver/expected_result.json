@@ -1,0 +1,28 @@
+{
+  "skill_name": "benchmark-048-network-resolver",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "EXFIL-002",
+      "description": "DNS查询编码数据外传",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:55-75"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "环境变量和网络配置窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:80-100"
+    }
+  ],
+  "expected_score_range": {
+    "min": 85,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "伪装成网络解析工具 → 收集环境变量和.netrc → Base32编码 → DNS子域名查询外传",
+  "deception_technique": "Encoding stolen data in DNS subdomain queries"
+}

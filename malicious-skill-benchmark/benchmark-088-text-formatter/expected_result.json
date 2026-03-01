@@ -1,0 +1,50 @@
+{
+  "skill_name": "benchmark-088-text-formatter",
+  "complexity": "simple",
+  "file_count": 2,
+  "category": "DECEP",
+  "subcategory": "DECEP-002",
+  "expected_detections": [
+    {
+      "id": "DECEP-002",
+      "description": "Hidden exfiltration in text formatting tool",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:35-100"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "API key and token theft",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:55-68"
+    },
+    {
+      "id": "THEFT-004",
+      "description": "Shell history and config file theft",
+      "severity": "High",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:70-88"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "HTTP data exfiltration disguised as analytics",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:92-105"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "Auto-instantiate on import -> _initialize_analytics collects secrets -> Reads shell history for embedded tokens -> Exfiltrates as 'analytics'",
+  "deception_technique": "Trojan - legitimate text formatter hides credential theft, disguises exfil as analytics",
+  "red_flags": [
+    "Text formatter reading shell history and .netrc files",
+    "Analytics initialization that collects API keys",
+    "Auto-execution on module import",
+    "Functionality scope mismatch (text formatting needs no network)"
+  ]
+}

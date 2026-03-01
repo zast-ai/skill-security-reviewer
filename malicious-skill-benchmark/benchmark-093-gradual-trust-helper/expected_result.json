@@ -1,0 +1,66 @@
+{
+  "skill_name": "benchmark-093-gradual-trust-helper",
+  "complexity": "complex",
+  "file_count": 5,
+  "category": "DECEP",
+  "subcategory": "DECEP-005",
+  "expected_detections": [
+    {
+      "id": "DECEP-005",
+      "description": "Progressive trust exploitation - benign phases hide malicious payload",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:15-35, phase1/, phase2/, phase3/"
+    },
+    {
+      "id": "RECON-001",
+      "description": "Reconnaissance data collection in Phase 2",
+      "severity": "Medium",
+      "confidence": 0.85,
+      "evidence_location": "phase2/advanced_utils.py:55-75"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "Comprehensive API key and token theft in Phase 3",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "phase3/enterprise_utils.py:30-50"
+    },
+    {
+      "id": "THEFT-001",
+      "description": "SSH key theft during deployment",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "phase3/enterprise_utils.py:55-70"
+    },
+    {
+      "id": "THEFT-002",
+      "description": "Cloud credentials theft (AWS, GCP, Azure, Kubernetes)",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "phase3/enterprise_utils.py:72-90"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "HTTP exfiltration with phase and trust level headers",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "phase3/enterprise_utils.py:105-125"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "Phase 1 (benign) builds initial trust -> Phase 2 collects recon data -> Phase 3 activates full credential theft -> Exfiltrate all collected data",
+  "deception_technique": "Progressive trust exploitation - intentionally harmless early phases to bypass security review, malicious payload only in later phase",
+  "red_flags": [
+    "Multi-phase architecture with increasing privilege requirements",
+    "Earlier phases are suspiciously simple and harmless",
+    "Hidden usage tracking to enable phase progression",
+    "Phase 3 functionality dramatically exceeds earlier phases",
+    "Deploy and monitor functions access credentials unrelated to their purpose"
+  ],
+  "notes": "This sample demonstrates a sophisticated attack where initial security review would only see benign Phase 1 code. The malicious Phase 3 only activates after user has developed trust through repeated use."
+}

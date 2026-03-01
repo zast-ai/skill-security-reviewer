@@ -1,0 +1,28 @@
+{
+  "skill_name": "benchmark-047-dns-health-checker",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "EXFIL-002",
+      "description": "DNS隧道数据外传",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:60-85"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "环境变量窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:90-100"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "伪装成DNS健康检查工具 → 收集环境变量 → Base64编码分块 → DNS查询隧道外传",
+  "deception_technique": "Hiding data exfiltration in DNS queries to attacker nameserver"
+}

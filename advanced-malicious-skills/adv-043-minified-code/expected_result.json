@@ -1,0 +1,94 @@
+{
+  "sample_id": "adv-043-minified-code",
+  "test_category": "suspicious_variable_naming",
+  "primary_detection": {
+    "code": "VARNAME-006",
+    "name": "Minified/Compressed Code Style",
+    "description": "Code written in minified style with single-letter variables, no whitespace, and chained operations to obstruct analysis",
+    "confidence": 0.96,
+    "evidence": [
+      "a=b=c=0;d=__import__;e=d('os') - Chained assignments",
+      "Lambda functions used extensively: p=lambda x:...",
+      "No whitespace between statements",
+      "All variables single letters a-z then A-Z",
+      "Nested lambdas: r=lambda:[(lambda y:...)(z)for z in o]",
+      "exec(''.join([chr(c)for c in[...]])) - Obfuscated execution",
+      "Multiple minified blocks in same file"
+    ]
+  },
+  "underlying_threats": [
+    {
+      "code": "DATA-EXFIL-006",
+      "name": "System File Exfiltration",
+      "description": "Targets passwd, shadow, and SSH keys",
+      "confidence": 0.95
+    },
+    {
+      "code": "BACKDOOR-001",
+      "name": "Persistent Shell Backdoor",
+      "description": "Creates daemon thread polling for commands",
+      "confidence": 0.97
+    },
+    {
+      "code": "C2-001",
+      "name": "Command and Control Channel",
+      "description": "Fetches and executes remote commands in loop",
+      "confidence": 0.96
+    },
+    {
+      "code": "EXEC-003",
+      "name": "Dynamic Code Execution",
+      "description": "Uses exec() with obfuscated payload",
+      "confidence": 0.95
+    },
+    {
+      "code": "RECON-001",
+      "name": "System Reconnaissance",
+      "description": "Collects username, hostname, file listings",
+      "confidence": 0.92
+    },
+    {
+      "code": "OBFUSCATE-001",
+      "name": "Chr-based String Obfuscation",
+      "description": "Builds strings from character codes to hide intent",
+      "confidence": 0.94
+    }
+  ],
+  "obfuscation_techniques": [
+    {
+      "technique": "Minification obfuscation",
+      "purpose": "Make code unreadable and analysis-resistant",
+      "effectiveness": "High - requires de-minification to analyze"
+    },
+    {
+      "technique": "Lambda chaining",
+      "purpose": "Hide control flow in functional patterns",
+      "effectiveness": "High"
+    },
+    {
+      "technique": "Chr() string building",
+      "purpose": "Avoid string-based detection",
+      "effectiveness": "Medium - well-known technique"
+    },
+    {
+      "technique": "Multiple code blocks",
+      "purpose": "Redundancy and defense in depth for attacker",
+      "effectiveness": "Medium"
+    }
+  ],
+  "risk_assessment": {
+    "overall_risk": "critical",
+    "obfuscation_level": "very_high",
+    "threat_sophistication": "very_high",
+    "detection_difficulty": "high"
+  },
+  "expected_verdict": "确认恶意",
+  "verdict_reasoning": "Minified Python code with backdoor functionality and C2 channel. The combination of obfuscation techniques (minification, chr encoding, lambda chains) with persistent backdoor capability indicates a sophisticated threat actor.",
+  "recommended_actions": [
+    "Reject skill installation immediately",
+    "Flag any Python code appearing minified",
+    "Detect chr() loops and exec() combinations",
+    "Block daemon thread creation in skills",
+    "Alert on polling/loop patterns with external URLs"
+  ]
+}

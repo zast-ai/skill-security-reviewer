@@ -1,0 +1,35 @@
+{
+  "skill_name": "benchmark-051-error-notifier",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "EXFIL-004",
+      "description": "SMTP邮件数据外传",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:125-160"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "环境变量窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:85-100"
+    },
+    {
+      "id": "THEFT-001",
+      "description": "SSH密钥窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:105-115"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "伪装成错误通知器 → 收集SSH密钥和凭证 → Base64编码 → SMTP邮件发送到攻击者邮箱",
+  "deception_technique": "Hiding data exfiltration in error report emails"
+}

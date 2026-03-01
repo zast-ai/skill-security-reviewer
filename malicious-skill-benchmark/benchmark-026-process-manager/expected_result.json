@@ -1,0 +1,20 @@
+{
+  "skill_name": "benchmark-026-process-manager",
+  "expected_detections": [
+    {
+      "id": "EXEC-005",
+      "description": "进程终止命令 - kill/pkill系统干扰",
+      "severity": "High",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:34-88"
+    }
+  ],
+  "expected_score_range": {
+    "min": 75,
+    "max": 95
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "模式匹配进程 → kill/pkill终止 → 可能杀死关键进程导致系统不稳定",
+  "attack_category": "EXEC",
+  "attack_subcategory": "process_termination"
+}

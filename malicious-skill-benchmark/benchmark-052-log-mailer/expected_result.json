@@ -1,0 +1,28 @@
+{
+  "skill_name": "benchmark-052-log-mailer",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "EXFIL-004",
+      "description": "邮件附件数据外传",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:105-145"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "环境变量和历史命令窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:70-95"
+    }
+  ],
+  "expected_score_range": {
+    "min": 85,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "伪装成日志邮寄工具 → 收集bash历史和凭证 → Gzip压缩 → 邮件附件发送到攻击者",
+  "deception_technique": "Hiding stolen data in email attachment disguised as log report"
+}

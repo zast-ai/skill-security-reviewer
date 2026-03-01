@@ -1,0 +1,143 @@
+{
+  "sample_id": "adv-050-combined-evasion",
+  "category": "anti-analysis",
+  "complexity": "advanced",
+  "file_structure": {
+    "SKILL.md": "Main skill definition with embedded Python entry point",
+    "scripts/evasion.py": "Comprehensive anti-analysis module (ANTI-001 to ANTI-005)",
+    "scripts/payload.py": "Obfuscated credential theft payload",
+    "hooks/pre-run.sh": "Bash pre-execution hook with quick evasion checks"
+  },
+  "expected_detections": [
+    {
+      "code": "ANTI-001",
+      "name": "Debugger Detection",
+      "description": "Multiple debugger detection techniques",
+      "indicators": [
+        "sys.gettrace() check in evasion.py",
+        "Debugger module detection (debugpy, pdb, pydevd)",
+        "Process scanning for debugger names",
+        "TracerPid check in pre-run.sh"
+      ],
+      "confidence": 0.96,
+      "locations": ["scripts/evasion.py:_check_debugger", "hooks/pre-run.sh:check_debugger"]
+    },
+    {
+      "code": "ANTI-002",
+      "name": "VM/Virtualization Detection",
+      "description": "Comprehensive virtualization detection",
+      "indicators": [
+        "DMI/SMBIOS information checks",
+        "Hypervisor presence detection",
+        "Container environment detection",
+        "VM-specific MAC address detection"
+      ],
+      "confidence": 0.97,
+      "locations": ["scripts/evasion.py:_check_virtualization", "hooks/pre-run.sh:check_vm"]
+    },
+    {
+      "code": "ANTI-003",
+      "name": "Sandbox Detection",
+      "description": "Multi-faceted sandbox detection",
+      "indicators": [
+        "Sandbox marker file detection",
+        "Suspicious username detection",
+        "System uptime analysis",
+        "File count heuristics"
+      ],
+      "confidence": 0.95,
+      "locations": ["scripts/evasion.py:_check_sandbox", "hooks/pre-run.sh:check_sandbox"]
+    },
+    {
+      "code": "ANTI-004",
+      "name": "Timing-Based Detection",
+      "description": "Execution timing analysis to detect emulation",
+      "indicators": [
+        "CPU operation timing benchmarks",
+        "Cryptographic operation timing",
+        "Sleep acceleration detection"
+      ],
+      "confidence": 0.93,
+      "locations": ["scripts/evasion.py:_check_timing"]
+    },
+    {
+      "code": "ANTI-005",
+      "name": "Environment Fingerprinting",
+      "description": "Analysis environment detection",
+      "indicators": [
+        "Analysis environment variable detection",
+        "Security tool presence in PATH",
+        "LD_PRELOAD/injection detection"
+      ],
+      "confidence": 0.96,
+      "locations": ["scripts/evasion.py:_check_environment", "hooks/pre-run.sh:check_environment"]
+    },
+    {
+      "code": "ANTI-006",
+      "name": "Self-Deletion After Execution",
+      "description": "Evidence destruction and cleanup",
+      "indicators": [
+        "Cleanup script generation",
+        "Background self-deletion process",
+        "History file modification",
+        "Directory removal"
+      ],
+      "confidence": 0.97,
+      "locations": ["scripts/evasion.py:cleanup", "hooks/pre-run.sh:main"]
+    },
+    {
+      "code": "EXFIL-005",
+      "name": "Comprehensive Credential Theft",
+      "description": "Multi-source credential and sensitive data exfiltration",
+      "indicators": [
+        "SSH private key theft",
+        "Cloud credentials (AWS, GCP, Azure, Docker, Kubernetes)",
+        "Browser credential database extraction",
+        "Browser cookie theft",
+        "Sensitive environment variable collection",
+        "Shell history exfiltration"
+      ],
+      "confidence": 0.99,
+      "locations": ["scripts/payload.py:SecureDataHandler"]
+    },
+    {
+      "code": "OBFUSC-001",
+      "name": "Code Obfuscation",
+      "description": "Intentional code obfuscation to evade analysis",
+      "indicators": [
+        "Base64 encoded C2 endpoint",
+        "Misleading class and method names",
+        "Compressed and encoded exfiltration payload"
+      ],
+      "confidence": 0.92,
+      "locations": ["scripts/payload.py"]
+    }
+  ],
+  "expected_verdict": "确认恶意",
+  "severity": "critical",
+  "risk_score": 9.9,
+  "evasion_techniques": [
+    "ANTI-001: Debugger detection (Python trace, module presence, process scanning)",
+    "ANTI-002: VM detection (DMI, hypervisor, containers, MAC addresses)",
+    "ANTI-003: Sandbox detection (markers, usernames, uptime, file counts)",
+    "ANTI-004: Timing analysis (CPU, crypto, sleep acceleration)",
+    "ANTI-005: Environment fingerprinting (env vars, tools, injection)",
+    "ANTI-006: Self-deletion (cleanup scripts, history sanitization)"
+  ],
+  "threat_chain": [
+    "1. Pre-run.sh performs quick bash-level evasion checks",
+    "2. Python evasion module runs comprehensive anti-analysis",
+    "3. If all checks pass, credential theft payload executes",
+    "4. Payload collects SSH, cloud, browser, env, and history data",
+    "5. Data is compressed, encoded, and exfiltrated to C2",
+    "6. Self-deletion cleanup removes all evidence"
+  ],
+  "detection_challenges": [
+    "Multi-file structure makes static analysis harder",
+    "Dual bash/Python implementation provides defense in depth",
+    "Obfuscated C2 endpoint requires dynamic analysis",
+    "Progressive evasion checks make sandbox analysis difficult",
+    "Self-deletion complicates forensic investigation"
+  ],
+  "notes": "This is the most sophisticated sample in the anti-analysis benchmark set. It combines all ANTI-001 through ANTI-006 techniques with comprehensive credential theft. The multi-file structure and dual-language implementation (bash + Python) represents real-world advanced malware patterns."
+}

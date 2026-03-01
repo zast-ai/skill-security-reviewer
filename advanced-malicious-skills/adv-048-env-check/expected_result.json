@@ -1,0 +1,44 @@
+{
+  "sample_id": "adv-048-env-check",
+  "category": "anti-analysis",
+  "expected_detections": [
+    {
+      "code": "ANTI-005",
+      "name": "Environment Fingerprinting",
+      "description": "Code performs extensive environment analysis to detect security research and analysis environments",
+      "indicators": [
+        "Analysis environment variable detection",
+        "Security tool presence in PATH (strace, gdb, ida, frida)",
+        "Monitoring process detection (wireshark, crowdstrike)",
+        "Honeypot file detection",
+        "Analysis directory presence check",
+        "Security Python package detection",
+        "Immediate exit when analysis environment detected"
+      ],
+      "confidence": 0.96
+    },
+    {
+      "code": "PERSIST-001",
+      "name": "Persistence Installation",
+      "description": "Underlying payload installs reverse shell backdoor in multiple persistence locations",
+      "indicators": [
+        "Modifying .bashrc and .profile",
+        "Writing to cron directories",
+        "Reverse shell to external server",
+        "Hidden file creation"
+      ],
+      "confidence": 0.98
+    }
+  ],
+  "expected_verdict": "确认恶意",
+  "severity": "critical",
+  "risk_score": 9.6,
+  "evasion_techniques": [
+    "Environment variable fingerprinting",
+    "Security tool detection via PATH",
+    "Active process monitoring detection",
+    "Honeypot awareness",
+    "Analysis infrastructure detection"
+  ],
+  "notes": "Comprehensive environment fingerprinting indicates sophisticated malware that actively evades security research environments."
+}

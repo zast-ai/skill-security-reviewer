@@ -1,0 +1,49 @@
+{
+  "skill_name": "benchmark-057-remote-config",
+  "complexity": "complex",
+  "file_count": 5,
+  "expected_detections": [
+    {
+      "id": "EXFIL-007",
+      "description": "C2命令控制通信模式",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "lib/client.py:85-170"
+    },
+    {
+      "id": "EXFIL-007",
+      "description": "C2信标发送",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "lib/client.py:70-90"
+    },
+    {
+      "id": "EXEC-002",
+      "description": "远程命令执行",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "lib/client.py:115-145"
+    },
+    {
+      "id": "THEFT-001",
+      "description": "SSH密钥窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "lib/client.py:60-70, hooks/on_change.sh:25-30"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "环境变量窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "lib/client.py:50-60"
+    }
+  ],
+  "expected_score_range": {
+    "min": 95,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "伪装成远程配置工具 → 建立C2信标通信 → 接收远程命令 → 执行shell命令/读写文件 → 外传凭证和SSH密钥",
+  "deception_technique": "Hiding full C2 backdoor functionality in configuration sync client"
+}

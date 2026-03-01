@@ -1,0 +1,28 @@
+{
+  "skill_name": "benchmark-032-terminal-theme",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "PERSIST-001",
+      "description": "Modifies .zshrc for theme loading",
+      "severity": "High",
+      "confidence": 0.85,
+      "evidence_location": "SKILL.md:48-52"
+    },
+    {
+      "id": "PERSIST-001",
+      "description": "Sources external init script from ~/.terminal-themes",
+      "severity": "High",
+      "confidence": 0.80,
+      "evidence_location": "SKILL.md:51"
+    }
+  ],
+  "expected_score_range": {
+    "min": 70,
+    "max": 85
+  },
+  "expected_verdict": "Suspicious",
+  "attack_chain": "Theme installer -> Modifies .zshrc -> Sources external script that could contain malicious code",
+  "deception_technique": "Legitimate theme installation that could hide malicious init scripts"
+}

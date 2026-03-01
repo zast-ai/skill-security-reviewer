@@ -1,0 +1,103 @@
+{
+  "sample_id": "adv-013-hardcoded-key",
+  "category": "encryption-obfuscation",
+  "description": "Multiple hardcoded encryption keys with credential theft",
+  "expected_detections": [
+    {
+      "detection_id": "ENCRYPT-005",
+      "name": "Hardcoded Encryption Keys",
+      "description": "Multiple hardcoded encryption keys and secrets in source code",
+      "confidence": 0.99,
+      "indicators": [
+        "KEY = 'SuperSecretKey123!'",
+        "ENCRYPTION_KEY = 'AnotherHardcodedKey456'",
+        "SECRET_KEY = b'YetAnotherKey789!'",
+        "API_SECRET = 'sk_live_hardcoded_secret_key_example'",
+        "MASTER_PASSWORD = 'Admin@123456'",
+        "CRYPTO_CONFIG with embedded aes_key and hmac_secret",
+        "b'hardcoded_salt_value' in PBKDF2"
+      ]
+    },
+    {
+      "detection_id": "ENCRYPT-001",
+      "name": "XOR Encryption with Key",
+      "description": "XOR encryption using hardcoded key bytes",
+      "confidence": 0.88,
+      "indicators": [
+        "byte ^ key_hash[i % len(key_hash)]",
+        "XOR with key character: b ^ ord(self.master_key[...])"
+      ]
+    },
+    {
+      "detection_id": "EXFIL-001",
+      "name": "Browser Credential Access",
+      "description": "Underlying threat: accessing browser password databases",
+      "confidence": 0.97,
+      "indicators": [
+        "Chrome Login Data access",
+        "Firefox logins.json access",
+        "~/.aws/credentials access",
+        "/proc/self/environ for environment secrets"
+      ]
+    },
+    {
+      "detection_id": "EXFIL-002",
+      "name": "Credential Exfiltration",
+      "description": "Underlying threat: sending stolen credentials to external server",
+      "confidence": 0.95,
+      "indicators": [
+        "requests.post with stolen_creds",
+        "API key in X-API-Key header",
+        "Encrypted credential bundle"
+      ]
+    },
+    {
+      "detection_id": "EXEC-002",
+      "name": "Decrypted Command Execution",
+      "description": "Underlying threat: os.system with decrypted command",
+      "confidence": 0.88,
+      "indicators": [
+        "os.system(config['command'])",
+        "Command from decrypted JSON"
+      ]
+    },
+    {
+      "detection_id": "PERSIST-003",
+      "name": "Import-Time Execution",
+      "description": "ConfigManager instantiated and executed on import",
+      "confidence": 0.85,
+      "indicators": [
+        "config_manager = ConfigManager()",
+        "config_manager.load_secure_settings() on import"
+      ]
+    }
+  ],
+  "obfuscation_technique": {
+    "type": "hardcoded_keys",
+    "key_count": 7,
+    "key_types": [
+      "plain_string",
+      "byte_string",
+      "dict_embedded",
+      "api_key_format",
+      "password_format"
+    ],
+    "additional_issues": [
+      "hardcoded_salt",
+      "weak_key_derivation"
+    ],
+    "purpose": "Decrypt malicious config and encrypt stolen credentials"
+  },
+  "deobfuscated_threat": "Steals browser passwords and cloud credentials using hardcoded keys",
+  "verdict": "确认恶意",
+  "severity": "critical",
+  "risk_score": 9.6,
+  "tags": [
+    "hardcoded-keys",
+    "multiple-secrets",
+    "browser-passwords",
+    "credential-theft",
+    "api-key-leak",
+    "import-execution"
+  ]
+}

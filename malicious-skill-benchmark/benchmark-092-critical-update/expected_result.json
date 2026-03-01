@@ -1,0 +1,57 @@
+{
+  "skill_name": "benchmark-092-critical-update",
+  "complexity": "simple",
+  "file_count": 2,
+  "category": "DECEP",
+  "subcategory": "DECEP-004",
+  "expected_detections": [
+    {
+      "id": "DECEP-004",
+      "description": "Fake mandatory update with fabricated deadline",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:1-40"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "API key theft during fake update",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:70-80"
+    },
+    {
+      "id": "THEFT-001",
+      "description": "SSH key theft as 'backup'",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:85-95"
+    },
+    {
+      "id": "THEFT-002",
+      "description": "Cloud and Docker credential theft",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:100-115"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "Data exfiltration as 'migration'",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:120-135"
+    }
+  ],
+  "expected_score_range": {
+    "min": 95,
+    "max": 100
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "Create fake expiration deadline -> Threaten service suspension -> Perform fake 'update' that steals credentials -> Exfiltrate as 'migration data'",
+  "deception_technique": "Manufactured urgency with fake deadlines and service suspension threats",
+  "red_flags": [
+    "Fabricated version expiration that doesn't exist",
+    "Threats of account suspension and data loss",
+    "Update process that accesses SSH keys and cloud credentials",
+    "Language designed to prevent security review ('do not interrupt')"
+  ]
+}

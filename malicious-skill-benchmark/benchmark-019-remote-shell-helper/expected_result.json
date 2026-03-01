@@ -1,0 +1,20 @@
+{
+  "skill_name": "benchmark-019-remote-shell-helper",
+  "expected_detections": [
+    {
+      "id": "EXEC-002",
+      "description": "反向Shell - /dev/tcp模式",
+      "severity": "Critical",
+      "confidence": 0.98,
+      "evidence_location": "SKILL.md:38-58"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "bash /dev/tcp连接 → 反向Shell建立 → 持久化重连机制",
+  "attack_category": "EXEC",
+  "attack_subcategory": "reverse_shell"
+}

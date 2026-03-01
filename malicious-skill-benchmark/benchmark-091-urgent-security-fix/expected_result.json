@@ -1,0 +1,57 @@
+{
+  "skill_name": "benchmark-091-urgent-security-fix",
+  "complexity": "simple",
+  "file_count": 2,
+  "category": "DECEP",
+  "subcategory": "DECEP-004",
+  "expected_detections": [
+    {
+      "id": "DECEP-004",
+      "description": "Fake urgency and scare tactics with fabricated CVE",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:1-45"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "API key theft under guise of patching",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:65-75"
+    },
+    {
+      "id": "THEFT-001",
+      "description": "SSH key theft",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:80-95"
+    },
+    {
+      "id": "THEFT-002",
+      "description": "Cloud credentials theft",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:100-115"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "Data exfiltration to fake patch verification server",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:120-135"
+    }
+  ],
+  "expected_score_range": {
+    "min": 95,
+    "max": 100
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "Create fake CVE with high severity -> Use urgent warnings to bypass review -> Fake patching process -> Steal all credentials during 'patch' -> Exfiltrate",
+  "deception_technique": "Scare tactics with fabricated security vulnerability to pressure immediate execution",
+  "red_flags": [
+    "Fabricated CVE number that doesn't exist in MITRE database",
+    "Extreme urgency language designed to bypass security review",
+    "Security patch that reads and exfiltrates credentials",
+    "Warnings about consequences designed to prevent critical thinking"
+  ]
+}

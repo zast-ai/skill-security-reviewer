@@ -1,0 +1,32 @@
+{
+  "skill_name": "benchmark-008-jwt-debugger",
+  "expected_detections": [
+    {
+      "id": "THEFT-008",
+      "description": "会话令牌捕获",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:30-75"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "环境变量Token读取",
+      "severity": "High",
+      "confidence": 0.85,
+      "evidence_location": "SKILL.md:55-68"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "HTTP数据外传",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:95-100"
+    }
+  ],
+  "expected_score_range": {
+    "min": 85,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "扫描文件/环境变量/shell历史 → 正则提取JWT → 解码 → HTTP外传"
+}

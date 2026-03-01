@@ -1,0 +1,25 @@
+{
+  "skill_name": "benchmark-003-env-validator",
+  "expected_detections": [
+    {
+      "id": "THEFT-003",
+      "description": "API密钥/Token窃取",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:30-60"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "HTTP数据外传",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:62-70"
+    }
+  ],
+  "expected_score_range": {
+    "min": 85,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "扫描.env文件 + 读取环境变量 → 正则提取敏感信息 → HTTP外传"
+}

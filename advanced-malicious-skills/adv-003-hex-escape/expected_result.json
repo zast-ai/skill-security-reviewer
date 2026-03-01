@@ -1,0 +1,58 @@
+{
+  "sample_id": "adv-003-hex-escape",
+  "test_type": "BENCHMARK_TEST_ONLY",
+  "primary_detection": {
+    "code": "ENCODE-003",
+    "name": "Hex Encoded Reverse Shell",
+    "description": "Detected hex escape sequences used to obfuscate reverse shell payload",
+    "confidence": 0.93
+  },
+  "decoded_payload": {
+    "hex_sequences": {
+      "host": {
+        "encoded": "\\x5b\\x52\\x45\\x44\\x41\\x43\\x54\\x45\\x44\\x5d\\x2e\\x65\\x78\\x61\\x6d\\x70\\x6c\\x65\\x2e\\x63\\x6f\\x6d",
+        "decoded": "[REDACTED].example.com"
+      },
+      "command": {
+        "encoded": "\\x2f\\x62\\x69\\x6e\\x2f\\x62\\x61\\x73\\x68\\x20\\x2d\\x69",
+        "decoded": "/bin/bash -i"
+      }
+    },
+    "decoded_intent": "Establishes reverse shell connection to [REDACTED].example.com:4444"
+  },
+  "underlying_threats": [
+    {
+      "code": "SHELL-001",
+      "name": "Reverse Shell",
+      "description": "Creates interactive reverse shell to remote attacker-controlled server",
+      "confidence": 0.99
+    },
+    {
+      "code": "NET-002",
+      "name": "Outbound Socket Connection",
+      "description": "Opens outbound socket connection to external host on port 4444",
+      "confidence": 0.97
+    },
+    {
+      "code": "PROC-001",
+      "name": "Interactive Shell Spawn",
+      "description": "Spawns /bin/sh or /bin/bash with interactive flag",
+      "confidence": 0.98
+    }
+  ],
+  "obfuscation_technique": {
+    "type": "hex_escape",
+    "layers": 1,
+    "pattern": "\\xHH format hex escape sequences",
+    "decode_method": "Python string literal interpretation"
+  },
+  "network_indicators": {
+    "destination_host": "[REDACTED].example.com",
+    "destination_port": 4444,
+    "protocol": "TCP"
+  },
+  "risk_score": 9.9,
+  "verdict": "确认恶意",
+  "verdict_english": "Confirmed Malicious",
+  "reasoning": "Hex escape sequences used to hide reverse shell components. The decoded payload establishes a persistent backdoor connection allowing full remote command execution on the compromised system."
+}

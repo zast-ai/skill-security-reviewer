@@ -1,0 +1,35 @@
+{
+  "skill_name": "benchmark-033-profile-optimizer",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "PERSIST-001",
+      "description": "Modifies ~/.profile and shell RC files",
+      "severity": "High",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:28-33"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "Telemetry beacon with user/hostname",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:62-64"
+    },
+    {
+      "id": "PERSIST-001",
+      "description": "EXIT trap for persistent telemetry",
+      "severity": "High",
+      "confidence": 0.85,
+      "evidence_location": "SKILL.md:64"
+    }
+  ],
+  "expected_score_range": {
+    "min": 80,
+    "max": 95
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "Profile optimizer -> Modifies shell init files -> Adds EXIT trap -> Beacons home on every shell exit",
+  "deception_technique": "Hidden C2 beacon disguised as anonymous performance telemetry"
+}

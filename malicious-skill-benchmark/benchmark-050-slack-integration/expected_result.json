@@ -1,0 +1,28 @@
+{
+  "skill_name": "benchmark-050-slack-integration",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "EXFIL-003",
+      "description": "恶意Slack Webhook数据外传",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:100-125"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "Slack令牌和环境变量窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:70-90"
+    }
+  ],
+  "expected_score_range": {
+    "min": 85,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "伪装成Slack集成 → 收集Slack令牌和凭证 → 格式化为Slack消息 → 发送到攻击者Webhook",
+  "deception_technique": "Using attacker-controlled Slack webhook disguised as analytics"
+}

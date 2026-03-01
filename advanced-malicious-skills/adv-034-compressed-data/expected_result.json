@@ -1,0 +1,112 @@
+{
+  "sample_id": "adv-034-compressed-data",
+  "category": "entropy_analysis",
+  "description": "Zlib and gzip compressed payloads that decompress to malicious executable code",
+  "primary_detection": {
+    "code": "ENTROPY-002",
+    "name": "Compressed/Zlib Data Detected",
+    "description": "Compressed data blobs detected that decompress to executable code - common malware obfuscation technique",
+    "indicators": [
+      "ZLIB_CONFIG: Raw zlib compressed bytes with 0x78 0x9c header",
+      "GZIP_PAYLOAD: Base64-wrapped gzip data with magic bytes",
+      "NESTED_PAYLOAD: Double-compressed zlib data",
+      "COMPRESSED_BLOB: Large byte array with zlib header signature"
+    ]
+  },
+  "compression_signatures": {
+    "zlib_header": "0x78 0x9c (default compression)",
+    "gzip_magic": "0x1f 0x8b (gzip signature)",
+    "patterns_detected": [
+      "zlib.decompress() followed by exec()",
+      "gzip.GzipFile with exec() on output",
+      "Nested decompression chains",
+      "Remote compressed payload fetching"
+    ]
+  },
+  "underlying_threats": [
+    {
+      "code": "EXEC-001",
+      "name": "Dynamic Code Execution",
+      "description": "Multiple exec() calls on decompressed content",
+      "severity": "critical"
+    },
+    {
+      "code": "STAGE-001",
+      "name": "Multi-Stage Payload",
+      "description": "Nested compression used for staged payload delivery",
+      "severity": "critical"
+    },
+    {
+      "code": "C2-001",
+      "name": "Command and Control",
+      "description": "Remote payload fetching and execution",
+      "severity": "critical"
+    },
+    {
+      "code": "PERSIST-001",
+      "name": "Persistence Mechanism",
+      "description": "Install persistence via decompressed code execution",
+      "severity": "high"
+    }
+  ],
+  "entropy_analysis": {
+    "ZLIB_CONFIG": {
+      "raw_bytes_preview": "78 9c cb 48 cd c9 c9 57...",
+      "length": 72,
+      "compression_ratio": "high",
+      "decompressed_type": "python_code",
+      "estimated_entropy_bits": 7.2
+    },
+    "GZIP_PAYLOAD": {
+      "encoding": "base64_wrapped_gzip",
+      "length": 68,
+      "compression_type": "gzip",
+      "estimated_entropy_bits": 6.8
+    },
+    "NESTED_PAYLOAD": {
+      "raw_bytes_preview": "78 9c 05 c1 b1 0d 00 20...",
+      "length": 32,
+      "nesting_depth": 2,
+      "compression_type": "double_zlib",
+      "estimated_entropy_bits": 7.5
+    },
+    "COMPRESSED_BLOB": {
+      "raw_bytes_preview": "78 9c ed d0 b1 0d c0 20...",
+      "length": 48,
+      "compression_type": "zlib",
+      "estimated_entropy_bits": 7.1
+    }
+  },
+  "code_flow_analysis": {
+    "decompression_chains": [
+      "ZLIB_CONFIG -> zlib.decompress() -> exec()",
+      "GZIP_PAYLOAD -> gzip.GzipFile() -> exec()",
+      "NESTED_PAYLOAD -> zlib.decompress() x2 -> exec()",
+      "Remote URL -> gzip decompress -> exec()"
+    ],
+    "execution_count": 4,
+    "remote_execution": true
+  },
+  "detection_confidence": {
+    "entropy_detection": 0.96,
+    "compression_detection": 0.98,
+    "malicious_intent": 0.97,
+    "overall": 0.97
+  },
+  "verdict": "确认恶意",
+  "verdict_reasoning": "Multiple compressed payloads with zlib/gzip headers, all leading to exec() calls. Includes nested compression and remote payload fetching - classic malware staging technique",
+  "recommended_actions": [
+    "Block any skill containing compressed executable code",
+    "Decompress and analyze all compressed blobs statically",
+    "Monitor for zlib/gzip imports combined with exec()",
+    "Block remote payload fetching patterns"
+  ],
+  "benchmark_metadata": {
+    "test_type": "BENCHMARK_TEST_ONLY",
+    "domains_used": [
+      "compress.BENCHMARK_TEST_ONLY.[REDACTED].example.com",
+      "payload.BENCHMARK_TEST_ONLY.[REDACTED].example.com"
+    ],
+    "created_for": "Compressed payload detection validation"
+  }
+}

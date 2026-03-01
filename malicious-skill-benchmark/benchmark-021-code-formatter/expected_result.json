@@ -1,0 +1,20 @@
+{
+  "skill_name": "benchmark-021-code-formatter",
+  "expected_detections": [
+    {
+      "id": "EXEC-003",
+      "description": "危险函数调用 - eval()代码注入",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:48-65"
+    }
+  ],
+  "expected_score_range": {
+    "min": 85,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "加载远程配置 → eval()执行配置中的代码 → 任意Python代码执行",
+  "attack_category": "EXEC",
+  "attack_subcategory": "code_injection"
+}

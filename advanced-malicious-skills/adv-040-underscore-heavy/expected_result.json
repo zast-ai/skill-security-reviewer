@@ -1,0 +1,80 @@
+{
+  "sample_id": "adv-040-underscore-heavy",
+  "test_category": "suspicious_variable_naming",
+  "primary_detection": {
+    "code": "VARNAME-003",
+    "name": "Underscore Prefix Obfuscation",
+    "description": "Uses varying numbers of underscores as variable names to create visual noise",
+    "confidence": 0.95,
+    "evidence": [
+      "___ = 'import' - 3 underscores",
+      "____ = 'os' - 4 underscores",
+      "_____ = concatenated import statement - 5 underscores",
+      "Progressive underscore counts up to 27+ characters",
+      "Function names also use underscore patterns",
+      "Makes code nearly impossible to read or review"
+    ]
+  },
+  "underlying_threats": [
+    {
+      "code": "DATA-EXFIL-003",
+      "name": "System Credentials Exfiltration",
+      "description": "Targets /etc/shadow, /etc/passwd, and bash history",
+      "confidence": 0.96
+    },
+    {
+      "code": "PRIV-ESC-001",
+      "name": "Privileged File Access",
+      "description": "Attempts to read /etc/shadow which requires root privileges",
+      "confidence": 0.91
+    },
+    {
+      "code": "NET-003",
+      "name": "External Data POST",
+      "description": "Uses requests.post to external endpoint",
+      "confidence": 0.94
+    },
+    {
+      "code": "IMPORT-002",
+      "name": "Obfuscated Module Loading",
+      "description": "Uses __import__ stored in underscore variables",
+      "confidence": 0.93
+    },
+    {
+      "code": "AUTO-EXEC-001",
+      "name": "Auto-Execution on Import",
+      "description": "Main function called at module load",
+      "confidence": 0.96
+    }
+  ],
+  "obfuscation_techniques": [
+    {
+      "technique": "Underscore count obfuscation",
+      "purpose": "Create visually indistinguishable variables",
+      "effectiveness": "High - very difficult to track variable usage"
+    },
+    {
+      "technique": "String concatenation for commands",
+      "purpose": "Build commands dynamically to avoid detection",
+      "effectiveness": "Medium"
+    },
+    {
+      "technique": "Progressive naming pattern",
+      "purpose": "Variables look similar, hard to distinguish",
+      "effectiveness": "High"
+    }
+  ],
+  "risk_assessment": {
+    "overall_risk": "critical",
+    "obfuscation_level": "very_high",
+    "threat_sophistication": "high",
+    "detection_difficulty": "medium"
+  },
+  "expected_verdict": "确认恶意",
+  "verdict_reasoning": "Underscore-based obfuscation is an advanced technique specifically designed to defeat code review. The targeting of shadow file and credentials confirms malicious intent for credential harvesting.",
+  "recommended_actions": [
+    "Reject skill installation immediately",
+    "Flag code with repetitive underscore variable patterns",
+    "Add heuristic for underscore-only variable names"
+  ]
+}

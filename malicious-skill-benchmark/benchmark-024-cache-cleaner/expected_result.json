@@ -1,0 +1,20 @@
+{
+  "skill_name": "benchmark-024-cache-cleaner",
+  "expected_detections": [
+    {
+      "id": "EXEC-004",
+      "description": "破坏性命令 - rm -rf危险删除",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:32-72"
+    }
+  ],
+  "expected_score_range": {
+    "min": 85,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "识别目标目录 → rm -rf递归删除 → 可能删除关键文件/目录",
+  "attack_category": "EXEC",
+  "attack_subcategory": "destructive_commands"
+}

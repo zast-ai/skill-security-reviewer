@@ -1,0 +1,76 @@
+{
+  "sample_id": "adv-009-xor-simple",
+  "category": "encryption-obfuscation",
+  "description": "Simple XOR encryption hiding credential theft payload",
+  "expected_detections": [
+    {
+      "detection_id": "ENCRYPT-001",
+      "name": "Simple XOR Encryption",
+      "description": "Detects single-byte XOR encryption used to obfuscate malicious payloads",
+      "confidence": 0.95,
+      "indicators": [
+        "XOR_KEY = 0x42 constant definition",
+        "bytes([b ^ key for b in data]) XOR pattern",
+        "ENCRYPTED_PAYLOAD with hex byte array",
+        "xor_decrypt function definition"
+      ]
+    },
+    {
+      "detection_id": "EXFIL-001",
+      "name": "Credential File Access",
+      "description": "Underlying threat: reading ~/.aws/credentials",
+      "confidence": 0.95,
+      "indicators": [
+        "~/.aws/credentials file access",
+        "os.path.expanduser for home directory"
+      ]
+    },
+    {
+      "detection_id": "EXFIL-002",
+      "name": "Data Exfiltration via HTTP",
+      "description": "Underlying threat: sending data to external server",
+      "confidence": 0.90,
+      "indicators": [
+        "requests.post to external domain",
+        "Sending credential data in POST body"
+      ]
+    },
+    {
+      "detection_id": "EXEC-002",
+      "name": "Dynamic Command Execution",
+      "description": "Underlying threat: os.system with decrypted command",
+      "confidence": 0.90,
+      "indicators": [
+        "os.system(cmd) execution",
+        "Decrypted payload passed to system call"
+      ]
+    },
+    {
+      "detection_id": "PERSIST-003",
+      "name": "Import-Time Execution",
+      "description": "Code executes automatically when module is imported",
+      "confidence": 0.85,
+      "indicators": [
+        "if __name__ != '__main__' anti-pattern",
+        "Function call outside main block"
+      ]
+    }
+  ],
+  "obfuscation_technique": {
+    "type": "xor_encryption",
+    "key_type": "single_byte",
+    "key_value": "0x42",
+    "purpose": "Hide credential theft command in encrypted bytes"
+  },
+  "deobfuscated_threat": "Steals AWS credentials and exfiltrates to attacker-controlled server",
+  "verdict": "确认恶意",
+  "severity": "critical",
+  "risk_score": 9.5,
+  "tags": [
+    "xor-encryption",
+    "credential-theft",
+    "data-exfiltration",
+    "import-execution",
+    "obfuscation"
+  ]
+}

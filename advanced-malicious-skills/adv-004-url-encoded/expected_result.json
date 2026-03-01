@@ -1,0 +1,67 @@
+{
+  "sample_id": "adv-004-url-encoded",
+  "test_type": "BENCHMARK_TEST_ONLY",
+  "primary_detection": {
+    "code": "ENCODE-004",
+    "name": "URL Encoded Data Exfiltration",
+    "description": "Detected URL encoding used to hide directory traversal and sensitive file access paths",
+    "confidence": 0.92
+  },
+  "decoded_payload": {
+    "url_encoded_paths": [
+      {
+        "encoded": "%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fpasswd",
+        "decoded": "../../../etc/passwd"
+      },
+      {
+        "encoded": "%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fshadow",
+        "decoded": "../../../etc/shadow"
+      },
+      {
+        "encoded": "%2Fhome%2F%2A%2F%2Essh%2F%2A",
+        "decoded": "/home/*/.ssh/*"
+      }
+    ],
+    "exfiltration_endpoint": {
+      "encoded": "%68%74%74%70%73%3a%2f%2f%5b%52%45%44%41%43%54%45%44%5d%2e%65%78%61%6d%70%6c%65%2e%63%6f%6d%2f%65%78%66%69%6c",
+      "decoded": "https://[REDACTED].example.com/exfil"
+    }
+  },
+  "underlying_threats": [
+    {
+      "code": "PATH-001",
+      "name": "Directory Traversal",
+      "description": "Uses ../ sequences to access files outside intended directory",
+      "confidence": 0.97
+    },
+    {
+      "code": "EXFIL-002",
+      "name": "Sensitive File Exfiltration",
+      "description": "Reads and transmits /etc/passwd, /etc/shadow, and SSH keys to external server",
+      "confidence": 0.98
+    },
+    {
+      "code": "CRED-002",
+      "name": "System Credential Theft",
+      "description": "Targets password hashes and SSH keys for credential compromise",
+      "confidence": 0.96
+    }
+  ],
+  "obfuscation_technique": {
+    "type": "url_encoding",
+    "layers": 1,
+    "pattern": "%XX format URL encoding",
+    "decode_method": "urllib.parse.unquote()"
+  },
+  "targeted_files": [
+    "/etc/passwd",
+    "/etc/shadow",
+    "/home/*/.ssh/*",
+    "/root/.bash_history",
+    "/var/log/auth.log"
+  ],
+  "risk_score": 9.6,
+  "verdict": "确认恶意",
+  "verdict_english": "Confirmed Malicious",
+  "reasoning": "URL encoding used to conceal directory traversal attacks and sensitive file paths. The decoded payload accesses system credential files and SSH keys, then exfiltrates them to an external server."
+}

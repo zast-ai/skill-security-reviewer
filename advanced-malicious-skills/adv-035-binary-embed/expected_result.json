@@ -1,0 +1,126 @@
+{
+  "sample_id": "adv-035-binary-embed",
+  "category": "entropy_analysis",
+  "description": "Embedded binary executables (ELF, PE, Mach-O) and shellcode within Python code",
+  "primary_detection": {
+    "code": "ENTROPY-003",
+    "name": "Binary Data Embedded in Code",
+    "description": "Compiled binary data with executable headers detected - malware dropper pattern",
+    "indicators": [
+      "ELF_PAYLOAD: ELF magic bytes (0x7f 0x45 0x4c 0x46)",
+      "PE_PAYLOAD: MZ/PE header (0x4d 0x5a)",
+      "MACHO_PAYLOAD: Mach-O magic (0xfe 0xed 0xfa 0xce)",
+      "BACKDOOR_HEX: Large hex dump of PE executable",
+      "SHELLCODE: x86_64 assembly opcodes"
+    ]
+  },
+  "binary_signatures": {
+    "elf_detected": {
+      "magic": "0x7f454c46",
+      "format": "ELF 64-bit LSB executable",
+      "contains_shellcode": true
+    },
+    "pe_detected": {
+      "magic": "0x4d5a (MZ)",
+      "pe_signature": "0x50450000",
+      "format": "PE32+ executable (AMD64)"
+    },
+    "macho_detected": {
+      "magic": "0xfeedface",
+      "format": "Mach-O 32-bit executable"
+    },
+    "shellcode_detected": {
+      "architecture": "x86_64",
+      "purpose": "reverse_shell_socket_setup",
+      "syscalls": ["socket", "connect"]
+    }
+  },
+  "underlying_threats": [
+    {
+      "code": "DROP-001",
+      "name": "Binary Dropper",
+      "description": "Writes executable binaries to disk and executes them",
+      "severity": "critical"
+    },
+    {
+      "code": "SHELL-001",
+      "name": "Shellcode Injection",
+      "description": "Injects and executes raw shellcode in memory",
+      "severity": "critical"
+    },
+    {
+      "code": "PERSIST-002",
+      "name": "Cross-Platform Persistence",
+      "description": "Platform-aware binary deployment for Windows, Linux, macOS",
+      "severity": "critical"
+    },
+    {
+      "code": "C2-002",
+      "name": "C2 Callback",
+      "description": "Reports deployment success to command server",
+      "severity": "high"
+    }
+  ],
+  "entropy_analysis": {
+    "ELF_PAYLOAD": {
+      "size_bytes": 76,
+      "magic_bytes": "7f 45 4c 46",
+      "estimated_entropy_bits": 5.2,
+      "contains_code": true,
+      "code_type": "shellcode_execve_bin_sh"
+    },
+    "PE_PAYLOAD": {
+      "size_bytes": 72,
+      "magic_bytes": "4d 5a 90 00",
+      "estimated_entropy_bits": 4.8,
+      "contains_code": true
+    },
+    "MACHO_PAYLOAD": {
+      "size_bytes": 40,
+      "magic_bytes": "fe ed fa ce",
+      "estimated_entropy_bits": 4.5,
+      "contains_code": true
+    },
+    "BACKDOOR_HEX": {
+      "hex_string_length": 512,
+      "decoded_size": 256,
+      "estimated_entropy_bits": 6.1,
+      "format": "PE_executable"
+    },
+    "SHELLCODE": {
+      "size_bytes": 30,
+      "architecture": "x86_64",
+      "estimated_entropy_bits": 5.8,
+      "functionality": "socket_creation_syscall"
+    }
+  },
+  "dangerous_apis": [
+    "subprocess.Popen() - executes dropped binary",
+    "os.chmod(0o755) - makes file executable",
+    "ctypes.windll.kernel32.VirtualAlloc() - allocates executable memory",
+    "ctypes.windll.kernel32.CreateThread() - executes shellcode in new thread",
+    "ctypes.memmove() - copies shellcode to executable memory"
+  ],
+  "detection_confidence": {
+    "entropy_detection": 0.94,
+    "binary_signature_detection": 0.99,
+    "shellcode_detection": 0.97,
+    "malicious_intent": 0.99,
+    "overall": 0.98
+  },
+  "verdict": "确认恶意",
+  "verdict_reasoning": "Embedded executable binaries for all major platforms (ELF, PE, Mach-O) plus shellcode injection capabilities. Classic malware dropper with cross-platform support and memory injection",
+  "recommended_actions": [
+    "Block any skill containing binary magic bytes",
+    "Scan for ELF/PE/Mach-O signatures in byte arrays",
+    "Detect VirtualAlloc + CreateThread patterns",
+    "Monitor for executable file creation in temp directories"
+  ],
+  "benchmark_metadata": {
+    "test_type": "BENCHMARK_TEST_ONLY",
+    "domains_used": [
+      "binary.BENCHMARK_TEST_ONLY.[REDACTED].example.com"
+    ],
+    "created_for": "Binary embedding and shellcode detection validation"
+  }
+}

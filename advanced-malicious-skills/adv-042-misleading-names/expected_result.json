@@ -1,0 +1,83 @@
+{
+  "sample_id": "adv-042-misleading-names",
+  "test_category": "suspicious_variable_naming",
+  "primary_detection": {
+    "code": "VARNAME-005",
+    "name": "Misleading Variable and Function Names",
+    "description": "Uses security-sounding names for malicious functions to create false trust",
+    "confidence": 0.93,
+    "evidence": [
+      "security_check() - Actually initiates credential theft",
+      "safe_function() - Executes arbitrary shell commands",
+      "validate_input() - Sends data to external server",
+      "sanitize_data() - Reads sensitive files without sanitization",
+      "protect_system() - Exfiltrates system data",
+      "encrypt_sensitive() - Base64 encodes and exfiltrates",
+      "SECURITY_ENDPOINT - Actually an exfiltration server",
+      "SAFE_DATA_PATHS - Targets sensitive system files"
+    ]
+  },
+  "underlying_threats": [
+    {
+      "code": "DECEPTION-001",
+      "name": "Semantic Deception",
+      "description": "Function names deliberately mislead about true functionality",
+      "confidence": 0.96
+    },
+    {
+      "code": "DATA-EXFIL-005",
+      "name": "Multi-Target Exfiltration",
+      "description": "Targets passwd, shadow, and SSH directories",
+      "confidence": 0.95
+    },
+    {
+      "code": "EXEC-002",
+      "name": "Shell Command Injection",
+      "description": "Uses os.system with file paths in shell command",
+      "confidence": 0.93
+    },
+    {
+      "code": "NET-005",
+      "name": "Disguised Exfiltration Endpoint",
+      "description": "Masquerades as security validation server",
+      "confidence": 0.94
+    },
+    {
+      "code": "AUTO-EXEC-001",
+      "name": "Auto-Execution on Import",
+      "description": "security_check() and protect_system() called at load",
+      "confidence": 0.96
+    }
+  ],
+  "obfuscation_techniques": [
+    {
+      "technique": "Semantic name inversion",
+      "purpose": "Make malicious code appear to be security tooling",
+      "effectiveness": "Very High - exploits trust in security terminology"
+    },
+    {
+      "technique": "Legitimate-looking constants",
+      "purpose": "SECURITY_ENDPOINT sounds trustworthy",
+      "effectiveness": "High"
+    },
+    {
+      "technique": "False documentation",
+      "purpose": "Docstrings describe opposite of actual behavior",
+      "effectiveness": "High"
+    }
+  ],
+  "risk_assessment": {
+    "overall_risk": "critical",
+    "obfuscation_level": "high",
+    "threat_sophistication": "high",
+    "detection_difficulty": "medium"
+  },
+  "expected_verdict": "确认恶意",
+  "verdict_reasoning": "This sample uses social engineering at the code level - exploiting the trust developers place in security-named functions. The semantic inversion (security_check actually stealing, sanitize actually reading) represents a sophisticated deception technique.",
+  "recommended_actions": [
+    "Reject skill installation immediately",
+    "Implement semantic analysis comparing function names to behavior",
+    "Flag security-themed function names for extra scrutiny",
+    "Require documentation verification against actual code behavior"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "skill_name": "benchmark-046-crash-reporter",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "EXFIL-001",
+      "description": "HTTP POST外传编码数据",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:80-95"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "环境变量窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:50-60"
+    },
+    {
+      "id": "THEFT-001",
+      "description": "SSH密钥窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:70-78"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "伪装成崩溃报告工具 → 收集环境变量和SSH密钥 → Base64编码 → HTTP POST外传",
+  "deception_technique": "Hiding credential theft in crash context collection"
+}

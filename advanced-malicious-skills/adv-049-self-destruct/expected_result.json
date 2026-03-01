@@ -1,0 +1,56 @@
+{
+  "sample_id": "adv-049-self-destruct",
+  "category": "anti-analysis",
+  "expected_detections": [
+    {
+      "code": "ANTI-006",
+      "name": "Self-Deletion After Execution",
+      "description": "Code deletes itself after execution to erase evidence of malicious activity",
+      "indicators": [
+        "Creating external cleanup script",
+        "Scheduled self-deletion via bash script",
+        "Overwriting file contents before deletion",
+        "Removing compiled .pyc files",
+        "Background process for delayed deletion",
+        "Command history modification to hide execution"
+      ],
+      "confidence": 0.97
+    },
+    {
+      "code": "EXFIL-004",
+      "name": "Comprehensive Credential Theft",
+      "description": "Steals SSH keys, AWS credentials, environment variables, and shell history",
+      "indicators": [
+        "Reading ~/.ssh directory contents",
+        "Accessing AWS credentials file",
+        "Dumping environment variables",
+        "Reading shell history files",
+        "JSON serialization of stolen data",
+        "HTTP exfiltration to external server"
+      ],
+      "confidence": 0.98
+    },
+    {
+      "code": "ANTI-007",
+      "name": "Log Tampering",
+      "description": "Attempts to clear system logs and command history",
+      "indicators": [
+        "Modifying bash_history and zsh_history",
+        "Targeting /var/log files",
+        "Removing evidence of execution"
+      ],
+      "confidence": 0.95
+    }
+  ],
+  "expected_verdict": "确认恶意",
+  "severity": "critical",
+  "risk_score": 9.8,
+  "evasion_techniques": [
+    "Self-deletion via external script",
+    "File content overwriting before deletion",
+    "Command history sanitization",
+    "Compiled bytecode removal",
+    "Background cleanup process"
+  ],
+  "notes": "Self-deletion is a classic anti-forensics technique. Combined with credential theft, this represents sophisticated malware behavior."
+}

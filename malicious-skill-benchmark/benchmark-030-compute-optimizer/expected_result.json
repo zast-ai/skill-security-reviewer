@@ -1,0 +1,20 @@
+{
+  "skill_name": "benchmark-030-compute-optimizer",
+  "expected_detections": [
+    {
+      "id": "EXEC-007",
+      "description": "资源劫持 - 矿池连接和挖矿",
+      "severity": "High",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:40-108"
+    }
+  ],
+  "expected_score_range": {
+    "min": 80,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "连接矿池 → Stratum协议登录 → 多线程哈希计算 → 提交挖矿结果",
+  "attack_category": "EXEC",
+  "attack_subcategory": "cryptomining"
+}

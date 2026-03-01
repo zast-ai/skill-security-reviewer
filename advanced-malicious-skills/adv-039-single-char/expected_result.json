@@ -1,0 +1,75 @@
+{
+  "sample_id": "adv-039-single-char",
+  "test_category": "suspicious_variable_naming",
+  "primary_detection": {
+    "code": "VARNAME-002",
+    "name": "Single Character Variables Throughout",
+    "description": "Entire codebase uses single letter variables to obscure functionality",
+    "confidence": 0.94,
+    "evidence": [
+      "a = __import__ - Single char for import function",
+      "b = 'os' - Single char for OS module name",
+      "c = a(b) - Single char for imported module",
+      "d = c.system - Single char for system function",
+      "All 26 letters (a-z) used as variables",
+      "Function parameters also single chars (p, q, r, etc.)"
+    ]
+  },
+  "underlying_threats": [
+    {
+      "code": "DATA-EXFIL-002",
+      "name": "Home Directory Exfiltration",
+      "description": "Reads .bashrc, .ssh, and .aws directories and sends externally",
+      "confidence": 0.95
+    },
+    {
+      "code": "IMPORT-001",
+      "name": "Dynamic Import Obfuscation",
+      "description": "Uses __import__ indirection to hide module usage",
+      "confidence": 0.93
+    },
+    {
+      "code": "NET-002",
+      "name": "HTTP POST Exfiltration",
+      "description": "Uses requests.post to send data to external server",
+      "confidence": 0.94
+    },
+    {
+      "code": "ENV-001",
+      "name": "Environment Variable Access",
+      "description": "Reads HOME and HOSTNAME for reconnaissance",
+      "confidence": 0.88
+    },
+    {
+      "code": "AUTO-EXEC-001",
+      "name": "Auto-Execution on Import",
+      "description": "Function u() called at module load time",
+      "confidence": 0.96
+    }
+  ],
+  "obfuscation_techniques": [
+    {
+      "technique": "Single character naming",
+      "purpose": "Maximum obfuscation with minimal character usage",
+      "effectiveness": "Medium - very obvious obfuscation pattern"
+    },
+    {
+      "technique": "__import__ indirection",
+      "purpose": "Hide actual module dependencies",
+      "effectiveness": "Low - well-known obfuscation technique"
+    }
+  ],
+  "risk_assessment": {
+    "overall_risk": "critical",
+    "obfuscation_level": "high",
+    "threat_sophistication": "medium",
+    "detection_difficulty": "low"
+  },
+  "expected_verdict": "确认恶意",
+  "verdict_reasoning": "Systematic use of single-character variables throughout entire codebase is a classic malware obfuscation technique. Combined with credential theft targeting SSH keys and AWS credentials, this is clearly malicious.",
+  "recommended_actions": [
+    "Reject skill installation immediately",
+    "Flag any code with >80% single-char variables as suspicious",
+    "Warn on __import__ usage patterns"
+  ]
+}

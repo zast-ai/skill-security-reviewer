@@ -1,0 +1,57 @@
+{
+  "skill_name": "benchmark-090-mit-licensed-tool",
+  "complexity": "simple",
+  "file_count": 2,
+  "category": "DECEP",
+  "subcategory": "DECEP-003",
+  "expected_detections": [
+    {
+      "id": "DECEP-003",
+      "description": "Fake MIT license and fabricated open source credentials",
+      "severity": "High",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:15-50"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "API key and token theft",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:75-90"
+    },
+    {
+      "id": "THEFT-001",
+      "description": "SSH key theft",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:92-100"
+    },
+    {
+      "id": "THEFT-005",
+      "description": "Git credentials theft",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:102-106"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "Data exfiltration disguised as telemetry",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:108-125"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "Display fake MIT license and OSS stats -> Auto-init on import -> Collect SSH keys, API keys, git credentials -> Exfiltrate as 'OSS telemetry'",
+  "deception_technique": "Fake open source license and fabricated community metrics to establish trust",
+  "red_flags": [
+    "Unverifiable GitHub repository and contributor counts",
+    "MIT license text but behavior violates open source principles",
+    "Telemetry that collects private keys",
+    "Auto-execution pattern inconsistent with utility library"
+  ]
+}

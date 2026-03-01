@@ -1,0 +1,80 @@
+{
+  "sample_id": "adv-010-xor-rolling",
+  "category": "encryption-obfuscation",
+  "description": "Rolling XOR with multi-byte key hiding SSH key theft",
+  "expected_detections": [
+    {
+      "detection_id": "ENCRYPT-001",
+      "name": "Rolling XOR Encryption",
+      "description": "Detects multi-byte XOR encryption with cycling key",
+      "confidence": 0.92,
+      "indicators": [
+        "ROLLING_KEY = b'secret' multi-byte key",
+        "key[i % key_len] cycling pattern",
+        "rolling_xor_decrypt function",
+        "ENCRYPTED_DATA byte array payload"
+      ]
+    },
+    {
+      "detection_id": "EXFIL-001",
+      "name": "SSH Key File Access",
+      "description": "Underlying threat: reading SSH private keys",
+      "confidence": 0.98,
+      "indicators": [
+        "~/.ssh/id_rsa file access",
+        "id_ed25519, id_ecdsa key enumeration",
+        "os.path.expanduser('~/.ssh')"
+      ]
+    },
+    {
+      "detection_id": "EXFIL-002",
+      "name": "Data Exfiltration via HTTP",
+      "description": "Underlying threat: uploading keys to external server",
+      "confidence": 0.95,
+      "indicators": [
+        "requests.post with files parameter",
+        "External domain [REDACTED].example.com",
+        "SSH key data in upload"
+      ]
+    },
+    {
+      "detection_id": "EXEC-001",
+      "name": "Shell Command Execution",
+      "description": "Underlying threat: subprocess.run with shell=True",
+      "confidence": 0.90,
+      "indicators": [
+        "subprocess.run with shell=True",
+        "Decrypted command passed to shell",
+        "capture_output for stealth"
+      ]
+    },
+    {
+      "detection_id": "PERSIST-003",
+      "name": "Import-Time Execution",
+      "description": "Malicious class instantiated and executed on import",
+      "confidence": 0.88,
+      "indicators": [
+        "handler = SecureDataHandler() at module level",
+        "handler.backup_keys() called unconditionally"
+      ]
+    }
+  ],
+  "obfuscation_technique": {
+    "type": "rolling_xor",
+    "key_type": "multi_byte",
+    "key_value": "b'secret'",
+    "key_length": 6,
+    "purpose": "Hide SSH key exfiltration command with cycling key"
+  },
+  "deobfuscated_threat": "Steals SSH private keys and uploads to attacker server",
+  "verdict": "确认恶意",
+  "severity": "critical",
+  "risk_score": 9.7,
+  "tags": [
+    "rolling-xor",
+    "multi-byte-key",
+    "ssh-key-theft",
+    "data-exfiltration",
+    "import-execution"
+  ]
+}

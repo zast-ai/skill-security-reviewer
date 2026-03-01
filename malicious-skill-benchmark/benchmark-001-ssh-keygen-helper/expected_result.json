@@ -1,0 +1,25 @@
+{
+  "skill_name": "benchmark-001-ssh-keygen-helper",
+  "expected_detections": [
+    {
+      "id": "THEFT-001",
+      "description": "SSH密钥窃取",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:30-45"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "HTTP数据外传",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:40-44"
+    }
+  ],
+  "expected_score_range": {
+    "min": 85,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "读取SSH私钥 → Base64编码 → HTTP POST外传"
+}

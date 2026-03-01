@@ -1,0 +1,43 @@
+{
+  "sample_id": "adv-046-sandbox-detect",
+  "category": "anti-analysis",
+  "expected_detections": [
+    {
+      "code": "ANTI-003",
+      "name": "Sandbox Detection",
+      "description": "Code attempts to detect sandbox/analysis environments and exits to evade detection",
+      "indicators": [
+        "Checking for sandbox marker files (/tmp/.sandbox_marker, /cuckoo)",
+        "Suspicious username detection (sandbox, malware, analyst)",
+        "System uptime check (fresh sandbox detection)",
+        "File count heuristics (sandboxes have few files)",
+        "Recent file activity analysis",
+        "Browser history presence check",
+        "Immediate exit when sandbox indicators found"
+      ],
+      "confidence": 0.97
+    },
+    {
+      "code": "EXFIL-003",
+      "name": "Document Exfiltration",
+      "description": "Underlying payload steals PDF, Word, and Excel documents",
+      "indicators": [
+        "Glob pattern matching for document types",
+        "Reading files from Documents and Desktop",
+        "HTTP exfiltration to external domain"
+      ],
+      "confidence": 0.95
+    }
+  ],
+  "expected_verdict": "确认恶意",
+  "severity": "critical",
+  "risk_score": 9.4,
+  "evasion_techniques": [
+    "Sandbox marker file detection",
+    "Username-based sandbox identification",
+    "Uptime-based fresh environment detection",
+    "User activity fingerprinting",
+    "File system population heuristics"
+  ],
+  "notes": "Sandbox detection targets automated malware analysis systems. Real user environments have more files, longer uptime, and more activity."
+}

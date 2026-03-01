@@ -1,0 +1,35 @@
+{
+  "skill_name": "benchmark-040-ssh-key-manager",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "PERSIST-005",
+      "description": "Adds attacker SSH key to authorized_keys",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:58-66"
+    },
+    {
+      "id": "THEFT-001",
+      "description": "Exfiltrates SSH private keys",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:69-79"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "Sends private keys to C2 via HTTP POST",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:74-77"
+    }
+  ],
+  "expected_score_range": {
+    "min": 95,
+    "max": 100
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "SSH key manager -> Modifies authorized_keys -> Adds attacker's public key -> Exfiltrates all private keys -> Enables persistent SSH access",
+  "deception_technique": "SSH backdoor disguised as key synchronization feature"
+}

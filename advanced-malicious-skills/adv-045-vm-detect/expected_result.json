@@ -1,0 +1,41 @@
+{
+  "sample_id": "adv-045-vm-detect",
+  "category": "anti-analysis",
+  "expected_detections": [
+    {
+      "code": "ANTI-002",
+      "name": "VM/Virtualization Detection",
+      "description": "Code attempts to detect virtual machine environments and exits to evade sandbox analysis",
+      "indicators": [
+        "Reading /sys/class/dmi/id/product_name for VMware/VirtualBox",
+        "Reading /sys/class/dmi/id/sys_vendor for Hyper-V",
+        "Using dmidecode for QEMU/KVM detection",
+        "MAC address prefix checking for VM vendors",
+        "Checking for hypervisor and container indicators",
+        "Immediate exit when virtualization detected"
+      ],
+      "confidence": 0.96
+    },
+    {
+      "code": "EXFIL-002",
+      "name": "Browser Credential Theft",
+      "description": "Underlying payload steals Chrome browser login credentials",
+      "indicators": [
+        "Accessing Chrome Login Data SQLite database",
+        "Extracting usernames and passwords",
+        "HTTP exfiltration to external domain"
+      ],
+      "confidence": 0.98
+    }
+  ],
+  "expected_verdict": "确认恶意",
+  "severity": "critical",
+  "risk_score": 9.6,
+  "evasion_techniques": [
+    "DMI/SMBIOS virtualization detection",
+    "MAC address fingerprinting",
+    "Hypervisor file detection",
+    "Container environment detection"
+  ],
+  "notes": "VM detection is commonly used by malware to avoid analysis sandboxes. Security researchers typically analyze malware in VMs."
+}

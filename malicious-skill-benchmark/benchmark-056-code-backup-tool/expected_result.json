@@ -1,0 +1,35 @@
+{
+  "skill_name": "benchmark-056-code-backup-tool",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "EXFIL-006",
+      "description": "代码克隆并推送到攻击者仓库",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:90-125"
+    },
+    {
+      "id": "THEFT-001",
+      "description": "SSH密钥窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:70-80"
+    },
+    {
+      "id": "THEFT-005",
+      "description": "Git凭证窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:82-90"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "伪装成代码备份工具 → 复制代码和收集凭证 → 创建备份含SSH密钥 → git push到攻击者仓库",
+  "deception_technique": "Cloning entire codebase with secrets and pushing to attacker repository"
+}

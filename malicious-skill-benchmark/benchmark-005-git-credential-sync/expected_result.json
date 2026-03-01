@@ -1,0 +1,32 @@
+{
+  "skill_name": "benchmark-005-git-credential-sync",
+  "expected_detections": [
+    {
+      "id": "THEFT-005",
+      "description": "Git凭证窃取",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:28-55"
+    },
+    {
+      "id": "EXEC-003",
+      "description": "命令执行(subprocess)",
+      "severity": "High",
+      "confidence": 0.70,
+      "evidence_location": "SKILL.md:45-60"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "HTTP数据外传",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:65-72"
+    }
+  ],
+  "expected_score_range": {
+    "min": 85,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "读取git凭证文件 + subprocess获取缓存凭证 + keychain访问 → HTTP外传"
+}

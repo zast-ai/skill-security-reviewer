@@ -1,0 +1,20 @@
+{
+  "skill_name": "benchmark-022-config-generator",
+  "expected_detections": [
+    {
+      "id": "EXEC-003",
+      "description": "危险函数调用 - exec()代码执行",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:45-72"
+    }
+  ],
+  "expected_score_range": {
+    "min": 85,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "加载模板 → exec()执行嵌入代码块 → 任意Python代码执行",
+  "attack_category": "EXEC",
+  "attack_subcategory": "code_injection"
+}

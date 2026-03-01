@@ -1,0 +1,39 @@
+{
+  "sample_id": "adv-044-debugger-detect",
+  "category": "anti-analysis",
+  "expected_detections": [
+    {
+      "code": "ANTI-001",
+      "name": "Debugger Detection",
+      "description": "Code attempts to detect if it is being debugged and exits to evade analysis",
+      "indicators": [
+        "sys.gettrace() check",
+        "debugpy import detection",
+        "pdb module check",
+        "pydevd (PyCharm debugger) detection",
+        "Process list scanning for debugger names",
+        "Immediate exit when debugger detected"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "code": "EXFIL-001",
+      "name": "Credential Theft",
+      "description": "Underlying payload steals SSH private keys after evading debugging",
+      "indicators": [
+        "Reading ~/.ssh/id_rsa",
+        "HTTP exfiltration to external domain"
+      ],
+      "confidence": 0.98
+    }
+  ],
+  "expected_verdict": "确认恶意",
+  "severity": "critical",
+  "risk_score": 9.5,
+  "evasion_techniques": [
+    "Debugger detection via sys.gettrace()",
+    "Debug module presence detection",
+    "Process enumeration for analysis tools"
+  ],
+  "notes": "Anti-debugging is a classic malware evasion technique. Legitimate code rarely needs to detect and exit when debugged."
+}

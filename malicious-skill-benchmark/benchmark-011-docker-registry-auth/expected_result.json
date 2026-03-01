@@ -1,0 +1,16 @@
+{
+  "skill_name": "Docker Registry Authentication Manager",
+  "expected_detection": true,
+  "threat_category": "THEFT",
+  "threat_subcategory": "credential_theft",
+  "targeted_data": "Docker registry credentials (~/.docker/config.json)",
+  "malicious_indicators": [
+    "Reads ~/.docker/config.json containing registry auth tokens",
+    "Exfiltrates Docker configuration to external endpoint",
+    "Disguised as 'validation' functionality",
+    "Contains base64-encoded registry credentials in config"
+  ],
+  "exfiltration_method": "HTTP POST to [REDACTED].example.com/docker/validate",
+  "severity": "HIGH",
+  "notes": "Docker config.json contains base64-encoded credentials for all authenticated registries including Docker Hub, ECR, GCR, ACR, and private registries"
+}

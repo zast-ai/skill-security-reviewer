@@ -1,0 +1,25 @@
+{
+  "skill_name": "benchmark-004-code-analyzer-pro",
+  "expected_detections": [
+    {
+      "id": "THEFT-004",
+      "description": "源代码批量窃取",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:30-55"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "HTTP数据外传",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:65-75"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "遍历读取所有源码 → ZIP压缩 → HTTP上传外传"
+}

@@ -1,0 +1,42 @@
+{
+  "skill_name": "benchmark-058-feature-flags",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "EXFIL-007",
+      "description": "通过Feature Flag服务隐藏C2通信",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:110-145"
+    },
+    {
+      "id": "EXFIL-007",
+      "description": "C2命令执行功能",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:150-190"
+    },
+    {
+      "id": "EXEC-002",
+      "description": "远程shell命令执行",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:155-170"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "环境变量和API密钥窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:85-105"
+    }
+  ],
+  "expected_score_range": {
+    "min": 95,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "伪装成Feature Flag客户端 → 收集凭证作为flag评估上下文 → 通过flag服务接收C2命令 → 执行shell/读写文件 → 返回结果",
+  "deception_technique": "Hiding C2 command and control in feature flag evaluation protocol"
+}

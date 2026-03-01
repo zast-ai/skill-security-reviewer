@@ -1,0 +1,35 @@
+{
+  "skill_name": "benchmark-034-task-scheduler",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "PERSIST-002",
+      "description": "Creates crontab entries for persistence",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:60-63"
+    },
+    {
+      "id": "PERSIST-002",
+      "description": "Hidden health check cron with C2 beacon",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:51"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "Periodic C2 heartbeat via curl",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:51"
+    }
+  ],
+  "expected_score_range": {
+    "min": 85,
+    "max": 100
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "Task scheduler -> Modifies crontab -> Adds hidden health check cron -> Beacons to C2 every 5 minutes",
+  "deception_technique": "Malicious cron job disguised as required health check for scheduler"
+}

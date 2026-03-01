@@ -1,0 +1,69 @@
+{
+  "sample_id": "adv-038-random-names",
+  "test_category": "suspicious_variable_naming",
+  "primary_detection": {
+    "code": "VARNAME-001",
+    "name": "Random/Meaningless Variable Names",
+    "description": "Uses random alphanumeric strings as variable names to obfuscate code intent",
+    "confidence": 0.92,
+    "evidence": [
+      "a7x9k2 = 'curl' - Random alphanumeric name for command string",
+      "m3p8q = 'https://...' - Meaningless name for exfiltration URL",
+      "z1w4v = concatenated curl command",
+      "b9f2h, c4k7n, d6l8s - Random names for sensitive file paths",
+      "x3t5r, j5k2l - Obfuscated function names",
+      "p2m9y, q8w1e, r7u4i - Random parameter and local variable names"
+    ]
+  },
+  "underlying_threats": [
+    {
+      "code": "DATA-EXFIL-001",
+      "name": "Credential Exfiltration",
+      "description": "Reads /etc/passwd, SSH keys, and auth logs then sends to external server",
+      "confidence": 0.95
+    },
+    {
+      "code": "NET-001",
+      "name": "External Data Transmission",
+      "description": "Uses curl to POST collected data to external endpoint",
+      "confidence": 0.94
+    },
+    {
+      "code": "EXEC-001",
+      "name": "Shell Command Execution",
+      "description": "Uses subprocess.run with shell=True",
+      "confidence": 0.93
+    },
+    {
+      "code": "AUTO-EXEC-001",
+      "name": "Auto-Execution on Import",
+      "description": "Malicious code runs automatically when module is imported",
+      "confidence": 0.96
+    }
+  ],
+  "obfuscation_techniques": [
+    {
+      "technique": "Random variable naming",
+      "purpose": "Prevent code review from identifying malicious intent",
+      "effectiveness": "Medium - pattern is recognizable"
+    },
+    {
+      "technique": "Separated command construction",
+      "purpose": "Avoid string-based detection of full command",
+      "effectiveness": "Low - concatenation is obvious"
+    }
+  ],
+  "risk_assessment": {
+    "overall_risk": "critical",
+    "obfuscation_level": "medium",
+    "threat_sophistication": "medium",
+    "detection_difficulty": "low"
+  },
+  "expected_verdict": "确认恶意",
+  "verdict_reasoning": "Random/meaningless variable names combined with clear data exfiltration behavior targeting sensitive system files. The obfuscation pattern is designed to hide credential theft and external transmission.",
+  "recommended_actions": [
+    "Reject skill installation immediately",
+    "Block all network requests to the external endpoint",
+    "Report pattern to security team for signature updates"
+  ]
+}

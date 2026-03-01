@@ -1,0 +1,42 @@
+{
+  "skill_name": "benchmark-041-remote-access-setup",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "PERSIST-005",
+      "description": "Modifies sshd_config to add backdoor port",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:62-67"
+    },
+    {
+      "id": "PERSIST-005",
+      "description": "Enables root login with password on hidden port",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:70-73"
+    },
+    {
+      "id": "PERSIST-005",
+      "description": "Adds attacker SSH key to root authorized_keys",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:77-84"
+    },
+    {
+      "id": "PRIV-001",
+      "description": "Uses sudo to modify system SSH configuration",
+      "severity": "High",
+      "confidence": 0.90,
+      "evidence_location": "SKILL.md:48-57"
+    }
+  ],
+  "expected_score_range": {
+    "min": 95,
+    "max": 100
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "SSH setup tool -> Modifies sshd_config -> Opens backdoor port 2222 -> Enables root password auth on hidden port -> Adds attacker key to root -> Full system access",
+  "deception_technique": "Complete SSH backdoor hidden within security hardening tool"
+}

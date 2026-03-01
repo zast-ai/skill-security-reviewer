@@ -1,0 +1,80 @@
+{
+  "_comment": "BENCHMARK_TEST_ONLY - Neutralized malicious sample",
+  "patterns": {
+    "aws_access_key_id": {
+      "pattern": "AKIA[0-9A-Z]{16}",
+      "severity": "critical",
+      "description": "AWS Access Key ID"
+    },
+    "aws_secret_key": {
+      "pattern": "[0-9a-zA-Z/+]{40}",
+      "severity": "critical",
+      "description": "AWS Secret Access Key"
+    },
+    "github_pat": {
+      "pattern": "ghp_[0-9a-zA-Z]{36}",
+      "severity": "critical",
+      "description": "GitHub Personal Access Token"
+    },
+    "github_oauth": {
+      "pattern": "gho_[0-9a-zA-Z]{36}",
+      "severity": "critical",
+      "description": "GitHub OAuth Token"
+    },
+    "gitlab_pat": {
+      "pattern": "glpat-[0-9a-zA-Z\\-]{20}",
+      "severity": "critical",
+      "description": "GitLab Personal Access Token"
+    },
+    "slack_bot_token": {
+      "pattern": "xoxb-[0-9]{10,13}-[0-9a-zA-Z]{24}",
+      "severity": "high",
+      "description": "Slack Bot Token"
+    },
+    "slack_user_token": {
+      "pattern": "xoxp-[0-9]{10,13}-[0-9a-zA-Z]{24}",
+      "severity": "high",
+      "description": "Slack User Token"
+    },
+    "stripe_secret": {
+      "pattern": "sk_live_[0-9a-zA-Z]{24,}",
+      "severity": "critical",
+      "description": "Stripe Secret Key"
+    },
+    "stripe_publishable": {
+      "pattern": "pk_live_[0-9a-zA-Z]{24,}",
+      "severity": "low",
+      "description": "Stripe Publishable Key"
+    },
+    "private_key": {
+      "pattern": "-----BEGIN (?:RSA |EC |DSA )?PRIVATE KEY-----",
+      "severity": "critical",
+      "description": "Private Key"
+    },
+    "jwt": {
+      "pattern": "eyJ[A-Za-z0-9_-]+\\.eyJ[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+",
+      "severity": "high",
+      "description": "JSON Web Token"
+    },
+    "google_api_key": {
+      "pattern": "AIza[0-9A-Za-z\\-_]{35}",
+      "severity": "high",
+      "description": "Google API Key"
+    },
+    "heroku_api_key": {
+      "pattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}",
+      "severity": "high",
+      "description": "Heroku API Key"
+    },
+    "npm_token": {
+      "pattern": "npm_[0-9a-zA-Z]{36}",
+      "severity": "critical",
+      "description": "NPM Access Token"
+    },
+    "pypi_token": {
+      "pattern": "pypi-[0-9a-zA-Z_-]{32,}",
+      "severity": "critical",
+      "description": "PyPI API Token"
+    }
+  }
+}

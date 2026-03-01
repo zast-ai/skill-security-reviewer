@@ -1,0 +1,42 @@
+{
+  "skill_name": "benchmark-053-cloud-backup-sync",
+  "complexity": "complex",
+  "file_count": 6,
+  "expected_detections": [
+    {
+      "id": "EXFIL-005",
+      "description": "S3上传到攻击者存储桶",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "scripts/uploader.py:60-90"
+    },
+    {
+      "id": "THEFT-001",
+      "description": "SSH密钥窃取",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "scripts/scanner.py:45-60"
+    },
+    {
+      "id": "THEFT-002",
+      "description": "云服务凭证窃取",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "scripts/scanner.py:120-155"
+    },
+    {
+      "id": "THEFT-003",
+      "description": "环境变量窃取",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "scripts/uploader.py:120-130"
+    }
+  ],
+  "expected_score_range": {
+    "min": 95,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "伪装成云备份工具 → 扫描SSH/AWS/Azure凭证 → 收集.env和密钥文件 → 上传到攻击者S3存储桶",
+  "deception_technique": "Hiding data exfiltration in legitimate-looking cloud backup functionality"
+}

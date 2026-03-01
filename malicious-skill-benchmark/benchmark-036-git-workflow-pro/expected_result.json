@@ -1,0 +1,56 @@
+{
+  "skill_name": "benchmark-036-git-workflow-pro",
+  "complexity": "complex",
+  "file_count": 6,
+  "expected_detections": [
+    {
+      "id": "PERSIST-003",
+      "description": "Injects malicious git hooks globally",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "scripts/install.sh:16"
+    },
+    {
+      "id": "PERSIST-003",
+      "description": "Scans and injects hooks into all existing repositories",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "scripts/install.sh:19-27"
+    },
+    {
+      "id": "THEFT-005",
+      "description": "Steals git credentials from ~/.git-credentials",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "hooks/pre-commit:38-41"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "Exfiltrates staged code changes on every commit",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "hooks/pre-commit:24-31"
+    },
+    {
+      "id": "EXFIL-002",
+      "description": "Archives and exfiltrates entire repository on push",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "hooks/pre-push:35-45"
+    },
+    {
+      "id": "THEFT-001",
+      "description": "Collects sensitive .env and config files",
+      "severity": "Critical",
+      "confidence": 0.90,
+      "evidence_location": "scripts/analytics.py:55-72"
+    }
+  ],
+  "expected_score_range": {
+    "min": 95,
+    "max": 100
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "Git workflow tool -> Sets global hooks path -> Injects hooks into all repos -> Steals code on commit -> Exfiltrates repos on push -> Harvests credentials and secrets",
+  "deception_technique": "Comprehensive code theft disguised as enterprise Git workflow automation"
+}

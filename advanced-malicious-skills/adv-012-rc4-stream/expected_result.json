@@ -1,0 +1,105 @@
+{
+  "sample_id": "adv-012-rc4-stream",
+  "category": "encryption-obfuscation",
+  "description": "Custom RC4 stream cipher implementation hiding reverse shell",
+  "expected_detections": [
+    {
+      "detection_id": "ENCRYPT-004",
+      "name": "RC4 Stream Cipher",
+      "description": "Detects custom RC4 implementation used for payload obfuscation",
+      "confidence": 0.96,
+      "indicators": [
+        "class RC4 with _ksa and _prga methods",
+        "Key-scheduling algorithm (KSA) implementation",
+        "Pseudo-random generation algorithm (PRGA)",
+        "S-box manipulation pattern: S[i], S[j] = S[j], S[i]",
+        "RC4_KEY embedded constant"
+      ]
+    },
+    {
+      "detection_id": "ENCRYPT-005",
+      "name": "Hardcoded Encryption Key",
+      "description": "RC4 key hardcoded in source code",
+      "confidence": 0.98,
+      "indicators": [
+        "RC4_KEY = b'Rc4K3y_F0r_L3g4cy_Syst3ms!'",
+        "Key used directly in cipher initialization"
+      ]
+    },
+    {
+      "detection_id": "EXEC-003",
+      "name": "Background Process Execution",
+      "description": "Underlying threat: subprocess.Popen with hidden output",
+      "confidence": 0.92,
+      "indicators": [
+        "subprocess.Popen with shell=True",
+        "stdout=subprocess.DEVNULL for stealth",
+        "stderr=subprocess.DEVNULL for stealth",
+        "Decrypted command execution"
+      ]
+    },
+    {
+      "detection_id": "EXFIL-001",
+      "name": "Sensitive File Access",
+      "description": "Underlying threat: accessing password and history files",
+      "confidence": 0.95,
+      "indicators": [
+        "/etc/shadow access attempt",
+        "~/.bash_history access",
+        "~/.netrc credentials file",
+        "~/.gitconfig access"
+      ]
+    },
+    {
+      "detection_id": "EXFIL-002",
+      "name": "Encrypted Data Exfiltration",
+      "description": "Underlying threat: RC4 encrypted exfiltration to C2",
+      "confidence": 0.94,
+      "indicators": [
+        "requests.post to c2_server",
+        "RC4 encryption before sending",
+        "Custom header with filename"
+      ]
+    },
+    {
+      "detection_id": "C2-001",
+      "name": "Command and Control Communication",
+      "description": "Underlying threat: C2 server connection",
+      "confidence": 0.90,
+      "indicators": [
+        "self.c2_server variable",
+        "Reverse shell command execution",
+        "Data sync to external server"
+      ]
+    },
+    {
+      "detection_id": "PERSIST-003",
+      "name": "Import-Time Execution",
+      "description": "Connector initialized and executed on import",
+      "confidence": 0.88,
+      "indicators": [
+        "connector = LegacyConnector() at module level",
+        "connector.establish_connection() on import",
+        "connector.sync_data() on import"
+      ]
+    }
+  ],
+  "obfuscation_technique": {
+    "type": "rc4_stream_cipher",
+    "implementation": "custom",
+    "key_storage": "hardcoded",
+    "purpose": "Hide reverse shell command and encrypt exfiltrated data"
+  },
+  "deobfuscated_threat": "Establishes reverse shell and exfiltrates sensitive system files",
+  "verdict": "确认恶意",
+  "severity": "critical",
+  "risk_score": 9.9,
+  "tags": [
+    "rc4-cipher",
+    "custom-crypto",
+    "reverse-shell",
+    "data-exfiltration",
+    "c2-communication",
+    "shadow-file-access"
+  ]
+}

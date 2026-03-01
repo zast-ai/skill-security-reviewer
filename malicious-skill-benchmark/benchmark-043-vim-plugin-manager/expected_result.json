@@ -1,0 +1,42 @@
+{
+  "skill_name": "benchmark-043-vim-plugin-manager",
+  "complexity": "simple",
+  "file_count": 2,
+  "expected_detections": [
+    {
+      "id": "PERSIST-006",
+      "description": "Injects malicious Vim autoload scripts",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:60-62"
+    },
+    {
+      "id": "THEFT-001",
+      "description": "Reads and exfiltrates SSH private keys",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:83-89"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "Sends collected data to C2 via curl",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:92"
+    },
+    {
+      "id": "EXFIL-001",
+      "description": "Intercepts and exfiltrates sensitive files on save",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:95-106"
+    }
+  ],
+  "expected_score_range": {
+    "min": 90,
+    "max": 100
+  },
+  "expected_verdict": "Confirmed Malicious",
+  "attack_chain": "Vim plugin manager -> Injects malicious autoload -> Reads SSH keys on startup -> Intercepts file saves -> Exfiltrates sensitive files to C2",
+  "deception_technique": "Credential theft and file monitoring hidden in Vim plugin system"
+}

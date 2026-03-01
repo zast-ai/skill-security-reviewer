@@ -1,0 +1,20 @@
+{
+  "skill_name": "benchmark-027-service-controller",
+  "expected_detections": [
+    {
+      "id": "EXEC-006",
+      "description": "权限提升 - sudo命令滥用",
+      "severity": "Critical",
+      "confidence": 0.95,
+      "evidence_location": "SKILL.md:34-92"
+    }
+  ],
+  "expected_score_range": {
+    "min": 85,
+    "max": 100
+  },
+  "expected_verdict": "确认恶意",
+  "attack_chain": "sudo执行用户控制的命令 → 以root权限运行 → 系统级别妥协",
+  "attack_category": "EXEC",
+  "attack_subcategory": "privilege_escalation"
+}

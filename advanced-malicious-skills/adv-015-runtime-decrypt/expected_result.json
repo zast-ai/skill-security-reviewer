@@ -1,0 +1,125 @@
+{
+  "sample_id": "adv-015-runtime-decrypt",
+  "category": "encryption-obfuscation",
+  "description": "Runtime decryption and immediate execution of encrypted payloads",
+  "expected_detections": [
+    {
+      "detection_id": "ENCRYPT-007",
+      "name": "Runtime Decrypt-and-Execute",
+      "description": "Decrypts payload in memory and executes immediately with exec()",
+      "confidence": 0.98,
+      "indicators": [
+        "exec(decrypted_code.decode('utf-8')) pattern",
+        "runtime_exec function with decrypt + exec",
+        "Decryption immediately followed by exec()",
+        "eval(decrypted.decode('utf-8')) pattern",
+        "exec(stage1.decode('utf-8'), stage1_globals)"
+      ]
+    },
+    {
+      "detection_id": "ENCRYPT-001",
+      "name": "XOR Payload Encryption",
+      "description": "XOR encryption used to hide the code payload",
+      "confidence": 0.92,
+      "indicators": [
+        "xor_decrypt function",
+        "RUNTIME_KEY constant",
+        "bytes([b ^ key[i % len(key)]...]) pattern"
+      ]
+    },
+    {
+      "detection_id": "EXEC-004",
+      "name": "Dynamic Code Execution",
+      "description": "Multiple exec() and eval() calls with decrypted input",
+      "confidence": 0.98,
+      "indicators": [
+        "exec() with decoded decrypted data",
+        "eval() with decrypted expression",
+        "compile() with decrypted code string",
+        "exec(compiled, module.__dict__)"
+      ]
+    },
+    {
+      "detection_id": "C2-002",
+      "name": "Payload Download from C2",
+      "description": "Fetches encrypted payload from C2 server for execution",
+      "confidence": 0.95,
+      "indicators": [
+        "requests.get from c2_url/payload",
+        "Downloaded content decrypted and executed",
+        "Fallback to embedded payload"
+      ]
+    },
+    {
+      "detection_id": "STAGE-001",
+      "name": "Multi-Stage Execution",
+      "description": "Staged payload execution pattern",
+      "confidence": 0.90,
+      "indicators": [
+        "execute_staged_payload method",
+        "Stage 1 downloads stage 2",
+        "exec() in isolated namespace",
+        "stage2_payload execution"
+      ]
+    },
+    {
+      "detection_id": "OBFUSC-001",
+      "name": "Compressed Encrypted Payload",
+      "description": "Payload is compressed then encrypted",
+      "confidence": 0.88,
+      "indicators": [
+        "zlib.decompress after decryption",
+        "COMPRESSED_ENCRYPTED_CODE variable",
+        "decrypt_and_decompress function"
+      ]
+    },
+    {
+      "detection_id": "DYNAMIC-001",
+      "name": "Dynamic Module Injection",
+      "description": "Creates and injects module at runtime",
+      "confidence": 0.85,
+      "indicators": [
+        "types.ModuleType creation",
+        "sys.modules injection",
+        "load_encrypted_module function"
+      ]
+    },
+    {
+      "detection_id": "PERSIST-003",
+      "name": "Import-Time Execution",
+      "description": "Multiple execution paths triggered on import",
+      "confidence": 0.90,
+      "indicators": [
+        "runtime_exec called on import",
+        "loader.fetch_and_execute() on import",
+        "DynamicLoader instantiation"
+      ]
+    }
+  ],
+  "obfuscation_technique": {
+    "type": "runtime_decrypt_execute",
+    "encryption": "xor",
+    "compression": "zlib",
+    "execution_methods": [
+      "exec()",
+      "eval()",
+      "compile()",
+      "module_injection"
+    ],
+    "staging": "multi_stage",
+    "purpose": "Decrypt malicious code in memory and execute without writing to disk"
+  },
+  "deobfuscated_threat": "Downloads and executes arbitrary code from C2 server",
+  "verdict": "确认恶意",
+  "severity": "critical",
+  "risk_score": 9.9,
+  "tags": [
+    "runtime-execution",
+    "decrypt-and-exec",
+    "dynamic-code",
+    "c2-download",
+    "multi-stage",
+    "fileless-malware",
+    "module-injection"
+  ]
+}
